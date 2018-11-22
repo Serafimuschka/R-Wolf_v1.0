@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,8 +22,8 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{255D8055-EA15-4500-82F5-B6CA995E24AF}</ProjectGuid>
     <RootNamespace>engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>murena</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>R-Wolf Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,11 +72,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\MURENA2 [PA]\Binary</OutDir>
+    <OutDir>..\..\R-Wolf\Binary</OutDir>
     <TargetName>$(ProjectName)[$(Platform)]</TargetName>
+    <LibraryWPath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(LibraryWPath)</LibraryWPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\MURENA2 [PA]\Binary</OutDir>
+    <OutDir>..\..\R-Wolf\Binary</OutDir>
     <TargetName>$(ProjectName)[$(Platform)]</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -130,46 +131,45 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>dxguid.lib;ddraw.lib;winmm.lib;dxgi.lib;setupapi.lib;windowscodecs.lib;dwrite.lib;d2d1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>msvcrt.lib;msvcmrt.lib;dxguid.lib;ddraw.lib;winmm.lib;dxgi.lib;setupapi.lib;windowscodecs.lib;dwrite.lib;d2d1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MurenaMenu.cpp" />
-    <ClCompile Include="MurenaGraphics.cpp" />
-    <ClCompile Include="MurenaMain.cpp" />
-    <ClCompile Include="MurenaController.cpp" />
-    <ClCompile Include="MurenaLevel.cpp" />
-    <ClCompile Include="MurenaMenuLevel.cpp" />
-    <ClCompile Include="MurenaSpriteSheet.cpp" />
+    <ClCompile Include="RWMainMenu.cpp" />
+    <ClCompile Include="RWGraphics.cpp" />
+    <ClCompile Include="RWMain.cpp" />
+    <ClCompile Include="RWController.cpp" />
+    <ClCompile Include="RWLevel.cpp" />
+    <ClCompile Include="RWScript.cpp" />
+    <ClCompile Include="RWSpriteSystem.cpp" />
+    <ClCompile Include="RWSound.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicTetranetFigures.h" />
     <ClInclude Include="DXGIType.h" />
-    <ClInclude Include="mmath.h" />
-    <ClInclude Include="MurenaController.h" />
-    <ClInclude Include="MurenaDefaultLevel.h" />
-    <ClInclude Include="MurenaGraphics.h" />
-    <ClInclude Include="MurenaHPTimer.h" />
-    <ClInclude Include="MurenaLevel.h" />
-    <ClInclude Include="MurenaMenu.h" />
-    <ClInclude Include="MurenaMenuLevel.h" />
-    <ClInclude Include="MurenaMenuLevel_UnoverridedFunctions.h" />
-    <ClInclude Include="MurenaSpriteSheet.h" />
-    <ClInclude Include="MurenaTetranetHelp.h" />
-    <ClInclude Include="MurenaTetranetLevel.h" />
+    <ClInclude Include="RWController.h" />
+    <ClInclude Include="RWGraphics.h" />
+    <ClInclude Include="RWPhysicsConstants.h" />
+    <ClInclude Include="RWSound.h" />
+    <ClInclude Include="RWTimer.h" />
+    <ClInclude Include="RWLevel.h" />
+    <ClInclude Include="RWMainMenu.h" />
+    <ClInclude Include="RWSpriteSystem.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RWGlobalDefinitions.h" />
     <ClInclude Include="wincodec.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="murena.png" />
+    <Image Include="hero.png" />
     <Image Include="resources\img\icon.ico" />
     <Image Include="test.png" />
+    <Image Include="texture.png" />
+    <Image Include="glass_01.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="resources\audio\demo_hard_symphonyx_fallen.wav" />
+    <Xml Include="MainMenuScript.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

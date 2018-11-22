@@ -5,19 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MurenaLauncher"
         mc:Ignorable="d"
-        Title="MURENA2:: Launcher" Height="600" Width="400" WindowStartupLocation="CenterScreen" Cursor="Arrow" WindowStyle="None" ResizeMode="NoResize" Icon="icon.ico" Background="#FF3E3E3E">
-	<Grid Cursor="Arrow">
-		<Rectangle Fill="#FF1F1F1F" HorizontalAlignment="Left" Height="80" VerticalAlignment="Top" Width="400" Margin="0" StrokeThickness="0"/>
-		<Rectangle Fill="#FF1F1F1F" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="400" Margin="0,580,0,0" StrokeThickness="0"/>
-		<TextBlock HorizontalAlignment="Right" Margin="0,17,10,0" TextWrapping="Wrap" Text="MURENA2" VerticalAlignment="Top" Height="46" Width="180" FontFamily="Larabiefont Free" Foreground="GreenYellow" FontSize="48"/>
-		<RadioButton Content="x86 [x32] OS" HorizontalAlignment="Left" Margin="35,245,0,0" VerticalAlignment="Top" FontFamily="Larabiefont Free" FontSize="20" Foreground="GreenYellow" BorderBrush="#FF1D1D1D" Background="#FF4B4B4B" Checked="RadioButton_Checked" GroupName="Bitness" IsChecked="True"/>
-		<RadioButton Content="x64 OS" HorizontalAlignment="Left" Margin="35,270,0,0" VerticalAlignment="Top" FontFamily="Larabiefont Free" FontSize="20" Foreground="GreenYellow" BorderBrush="#FF1D1D1D" Background="#FF4B4B4B" Checked="RadioButton_Checked_1" ClickMode="Press" GroupName="Bitness"/>
-		<TextBlock HorizontalAlignment="Left" Margin="15,200,0,0" TextWrapping="Wrap" Text="OS bitness:" VerticalAlignment="Top" Width="143" Foreground="GreenYellow" FontFamily="Larabiefont Free" FontSize="24"/>
-		<Button x:Name="launcherbtn" Content="LAUNCH" HorizontalAlignment="Left" Margin="75,480,0,0" VerticalAlignment="Top" Width="250" Background="#FF1D1D1D" FontFamily="Larabiefont Free" FontSize="72" Foreground="GreenYellow" BorderBrush="{x:Null}" Height="75" Click="launcherbtn_Click"/>
-		<Label x:Name="lowerlabel" Content="Developed and created by Einhorn32. 2018" HorizontalAlignment="Left" Margin="0,578,0,-3" VerticalAlignment="Top" Width="400" IsManipulationEnabled="True" Foreground="GreenYellow" FontFamily="Larabiefont Free" Height="25" FontSize="14"/>
-		<Label x:Name="labelenginepath" Content="working directory" HorizontalAlignment="Left" Margin="68,310,0,0" VerticalAlignment="Top" Width="322" Foreground="GreenYellow" FontFamily="Larabiefont Free" FontSize="16"/>
-		<Label Content="PATH:" HorizontalAlignment="Left" Margin="15,310,0,0" VerticalAlignment="Top" Width="48" Foreground="GreenYellow" FontFamily="Larabiefont Free" FontSize="16"/>
-		<Label Content="[Launcher must be in one folder with engine]" HorizontalAlignment="Left" Margin="33,345,0,0" VerticalAlignment="Top" Width="334" Foreground="GreenYellow" FontFamily="Larabiefont Free" Height="24" FontSize="14"/>
-		<Button x:Name="exitbtn" Content="EXIT" HorizontalAlignment="Left" Margin="350,90,0,0" VerticalAlignment="Top" Width="40" Background="#FF1D1D1D" FontFamily="Larabiefont Free" FontSize="14" Foreground="GreenYellow" BorderBrush="{x:Null}" Height="20" Click="exitbtn_Click"/>
-	</Grid>
+        Title="R-Wolf:: Launcher" Height="300" Width="800" WindowStartupLocation="CenterScreen" Cursor="Arrow" WindowStyle="None" ResizeMode="NoResize" Icon="icon.ico" Background="#FF3E3E3E">
+    <Grid Cursor="Arrow">
+        <Rectangle Fill="#FF1F1F1F" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="800" Margin="0" StrokeThickness="0"/>
+
+        <RadioButton Content="x86 [x32] OS" HorizontalAlignment="Left" Margin="30,82,0,0" VerticalAlignment="Top" FontFamily="Larabiefont Free" FontSize="20" Foreground="#FF2FB3FF" BorderBrush="#FF1D1D1D" Background="#FF4B4B4B" Checked="RadioButton_Checked" GroupName="Bitness" IsChecked="True"/>
+        <RadioButton Content="x64 OS" HorizontalAlignment="Left" Margin="30,107,0,0" VerticalAlignment="Top" FontFamily="Larabiefont Free" FontSize="20" Foreground="#FF2FB3FF" BorderBrush="#FF1D1D1D" Background="#FF4B4B4B" Checked="RadioButton_Checked_1" ClickMode="Press" GroupName="Bitness"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="OS bitness:" VerticalAlignment="Top" Width="143" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" FontSize="24"/>
+
+        <Button x:Name="launcherbtn" Content="LAUNCH" HorizontalAlignment="Left" Margin="15,229,0,0" VerticalAlignment="Top" Width="143" Background="#FF1D1D1D" FontFamily="Larabiefont Free" FontSize="25" Foreground="#FF2FB3FF" BorderBrush="{x:Null}" Height="28" Click="launcherbtn_Click"/>
+
+        <Label x:Name="lowerlabel" Content="Developed and created by KalterSeele. 2018" HorizontalAlignment="Left" Margin="472,275,0,0" VerticalAlignment="Top" Width="328" IsManipulationEnabled="True" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" Height="25" FontSize="14"/>
+        <Label x:Name="labelenginepath" Content="working directory" HorizontalAlignment="Left" Margin="63,147,0,0" VerticalAlignment="Top" Width="380" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" FontSize="16"/>
+        <Label Content="PATH:" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" Width="48" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" FontSize="16"/>
+        <Label Content="[Launcher must be in one folder with engine]" HorizontalAlignment="Left" Margin="15,173,0,0" VerticalAlignment="Top" Width="334" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" Height="24" FontSize="14"/>
+
+        <Button x:Name="exitbtn" Content="EXIT" HorizontalAlignment="Left" Margin="63,270,0,0" VerticalAlignment="Top" Width="40" Background="#FF1D1D1D" FontFamily="Larabiefont Free" FontSize="14" Foreground="#FF2FB3FF" BorderBrush="{x:Null}" Height="20" Click="exitbtn_Click"/>
+        <Rectangle Fill="#FF2FB3FF" HorizontalAlignment="Left" Height="25" StrokeThickness="0" VerticalAlignment="Top" Width="482" RenderTransformOrigin="0.5,0.5" Margin="-4,0,0,0">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-50.711"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-15.278"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+        <TextBlock HorizontalAlignment="Right" Margin="0,0,339,0" TextWrapping="Wrap" Text="R-Wolf Graphics Engine" VerticalAlignment="Top" Height="25" Width="446" FontFamily="Larabiefont Free" Foreground="#FF1F1F1F" FontSize="25"/>
+        <Label x:Name="versionlabel" HorizontalContentAlignment="Right" Content="version: " HorizontalAlignment="Left" Margin="492,0,0,0" VerticalAlignment="Top" Width="308" IsManipulationEnabled="True" Foreground="#FF2FB3FF" FontFamily="Larabiefont Free" Height="25" FontSize="14"/>
+
+    </Grid>
 </Window>

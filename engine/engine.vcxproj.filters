@@ -13,89 +13,92 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Файлы ресурсов\textures">
+      <UniqueIdentifier>{fed118b3-b1b4-4b36-a975-990208fad508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\textures\materials">
+      <UniqueIdentifier>{174e1a52-a64c-4635-a1ea-6d1cedce6701}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MurenaController.cpp">
+    <ClCompile Include="RWGraphics.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaGraphics.cpp">
+    <ClCompile Include="RWMain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaLevel.cpp">
+    <ClCompile Include="RWLevel.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaMain.cpp">
+    <ClCompile Include="RWMainMenu.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaSpriteSheet.cpp">
+    <ClCompile Include="RWController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaMenuLevel.cpp">
+    <ClCompile Include="RWSpriteSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MurenaMenu.cpp">
+    <ClCompile Include="RWScript.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="RWSound.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MurenaLevel.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaGraphics.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaController.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaDefaultLevel.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaSpriteSheet.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="DXGIType.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="wincodec.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="MurenaHPTimer.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaMenuLevel.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaTetranetLevel.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaTetranetHelp.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="BasicTetranetFigures.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MurenaMenuLevel_UnoverridedFunctions.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="mmath.h">
+    <ClInclude Include="RWGraphics.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="MurenaMenu.h">
+    <ClInclude Include="RWLevel.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWMainMenu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWController.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWTimer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWSpriteSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWGlobalDefinitions.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWPhysicsConstants.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RWSound.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\img\icon.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
     <Image Include="test.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="murena.png">
+    <Image Include="hero.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="resources\img\icon.ico">
+    <Image Include="texture.png">
       <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="glass_01.png">
+      <Filter>Файлы ресурсов\textures\materials</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +107,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="resources\audio\demo_hard_symphonyx_fallen.wav">
+    <Xml Include="MainMenuScript.xml">
       <Filter>Файлы ресурсов</Filter>
-    </Media>
+    </Xml>
   </ItemGroup>
 </Project>

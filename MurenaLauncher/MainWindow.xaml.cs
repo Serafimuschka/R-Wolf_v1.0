@@ -31,7 +31,9 @@ namespace MurenaLauncher
         {
             InitializeComponent();
             labelenginepath.Content = path;
+            versionlabel.Content = "ver. " + "0.1 / Pre-Alpha Test Mode /";
         }
+
         private void launcherbtn_Click(object sender, RoutedEventArgs e)
         {
         
@@ -40,27 +42,27 @@ namespace MurenaLauncher
                 case 0:
                     try
                     {
-                        Process.Start(path + "\\murena[Win32].exe");
+                        Process.Start(path + "\\R-Wolf Engine[Win32].exe");
                         isSucceeded = true;
                     }
                     catch
                     {
-                        ErrorCode = 320;
+                        ErrorCode = 32;
                         MessageBox.Show("Code: 0x" + ErrorCode + "\nLauncher can't find an engine executable file\n" +
-                            "Tried to open MURENA2 by path: " + path + "\\" + "murena[86].exe", "MURENA2 Launcher:: Critical error",MessageBoxButton.OK,MessageBoxImage.Error);
+                            "Tried to open R-Wolf Engine by path: " + path + "\\" + "R-Wolf Engine[Win32].exe", "R-Wolf Engine Launcher:: Critical error", MessageBoxButton.OK,MessageBoxImage.Error);
                     }
                     break;
                 case 1:
                     try
                     {
-                        Process.Start(path + "\\murena[x64].exe");
+                        Process.Start(path + "\\R-Wolf Engine[x64].exe");
                         isSucceeded = true;
                     }
                     catch
                     {
-                        ErrorCode = 640;
+                        ErrorCode = 64;
                         MessageBox.Show("Code: 0x" + ErrorCode + "\nLauncher can't find an engine executable file\n" +
-                            "Tried to open MURENA2 by path: " + path + "\\" + "murena[x64].exe", "MURENA2 Launcher:: Critical error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            "Tried to open R-Wolf Engine by path: " + path + "\\" + "R-Wolf Engine[x64].exe", "R-Wolf Engine Launcher:: Critical error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     break;
             }

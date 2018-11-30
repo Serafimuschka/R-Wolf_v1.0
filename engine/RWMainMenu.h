@@ -5,16 +5,8 @@
 #include "RWSound.h"
 
 class RWMainMenu : public RWLevel {
-
 	RWTimer* hpTimer;
-
 public:
-
-	double TranslateData(XMFLOAT2 vec) override;
-	void Action(UINT code) override;
-	void TranslateRect(UINT width, UINT height) override;
-	void GetConsoleInput(WCHAR* input) override;
-
 	// Функция Load(): подгатавливает уровень к инициализации, загружает данные
 	void Load() override;
 	// Функция Unload(): выгрузка данных, деконструкция уровня

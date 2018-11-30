@@ -333,8 +333,19 @@ void RWGraphics::DrawArc(XMFLOAT2 center, XMFLOAT2 radius, XMFLOAT4 color, float
 	path->Release();
 }
 
-VOID RWGraphics::DEBUG_ShowInfo(double encounter, double worktime) {
+void RWGraphics::logic_DrawEntity(item entity, XMFLOAT2 coord, XMFLOAT2 properties, int type) {
+	switch (type) {
+	case ENTITY_RECT:
+		rect(XMFLOAT4(coord.x, coord.y, 50, 50), Black, 1, true);
+		break;
+	case ENTITY_BULLET:
+		rect(XMFLOAT4(coord.x, coord.y - 2.5, coord.x + 15, coord.y + 2.5), OrangeRed, 1, true);
+	}
+}
+
+VOID RWGraphics::DEBUG_ShowInfo(const char* argv) {
 	MEMORYSTATUSEX msex;
+	double oldTime, newTime, delta, elapsed = 0, frame = 0, fps;
 	msex.dwLength = sizeof(msex);
 	GlobalMemoryStatusEx(&msex);
 	unsigned long long int memoryAll = msex.ullAvailPhys / 1024 / 1024;
@@ -350,8 +361,12 @@ VOID RWGraphics::DEBUG_ShowInfo(double encounter, double worktime) {
 
 	PrintTextManual(L"Используемая/пиковая ОЗУ и FPS:", XMFLOAT2(45, 15), 16, RW_Consolas, DeepSkyBlue);
 
+	if (argv == "begin") oldTime = GetTickCount();
+	if (argv == "end") newTime = GetTickCount();
+	delta = newTime - oldTime;
+	fps = 1000 / delta;
 	ProgressBar(XMFLOAT2(35, 65), XMFLOAT2(200, 20), memp, mem, DeepSkyBlue);
-	ProgressBar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, encounter / worktime, DeepSkyBlue);
+	ProgressBar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, fps, DeepSkyBlue);
 }
 
 VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::wstring b_num) {
@@ -388,11 +403,11 @@ VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::ws
 	text += wss.str().c_str();
 	text += L" часов, ";
 	wss.str(L"");
-	wss << min;
+	wss << min - 60 * hour;
 	text += wss.str().c_str();
 	text += L" минут, ";
 	wss.str(L"");
-	wss << sec;
+	wss << sec - 60 * min;
 	text += wss.str().c_str();
 	text += L" секунд\n";
 	wss.str(L"");
@@ -400,7 +415,7 @@ VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::ws
 	text += b_name;
 	text += L", билд ";
 	text += b_num;
-	text += L"\nДата сборки/компиляции: ";
+	text += L"\nДата сборки/компиляции RWGraphics: ";
 	wss << __TIMESTAMP__;
 	text += wss.str().c_str();
 	wss.str(L"");
@@ -430,4 +445,4 @@ VOID RWGraphics::RW_DrawInterface(const char* argv) {
 		DrawRectangle(XMFLOAT4(GetSystemMetrics(SM_CXSCREEN) - 15, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), XMFLOAT4(15, 15, 15, 255), 1, true);
 		DrawRectangle(XMFLOAT4(545, 15, GetSystemMetrics(SM_CXSCREEN) - 15, GetSystemMetrics(SM_CYSCREEN) - 15), DeepSkyBlue, 2);
 	}
-} 
+}

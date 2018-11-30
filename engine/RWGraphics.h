@@ -5,6 +5,9 @@
 #include <xnamath.h>
 #include <string>
 
+#define _RW_USE_GLOBAL_DEFINITIONS
+#include "RWGlobalDefinitions.h"
+
 #define rwfont std::wstring
 
 class RWGraphics {
@@ -170,7 +173,7 @@ public:
 	rwfont		Fixedsys = L"Fixedsys";
 	rwfont		GOST = L"GOST type A";
 	rwfont		HoloLens = L"HoloLens MDL2 Assets";
-	rwfont		Roboto = L"Roboto";
+	rwfont		Roboto = L"Roboto Thin";
 	rwfont		Larabiefont = L"Larabiefont Free";
 	rwfont		Segoe = L"Segoe MDL2 Assets";
 	rwfont		System = L"System";
@@ -249,9 +252,10 @@ public:
 	void PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, D2D1_COLOR_F color);
 	void PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, XMFLOAT4 color);
 
-	VOID DEBUG_ShowInfo(double timerIn, double worktime);
+	void logic_DrawEntity(item entity, XMFLOAT2 coord, XMFLOAT2 properties, int type);
+
+	VOID DEBUG_ShowInfo(const char* argv);
 	VOID DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::wstring b_num);
 	VOID DEBUG_ShowMenu();
-
 	VOID RW_DrawInterface(const char* argv);
 };

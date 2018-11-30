@@ -1,7 +1,7 @@
 #pragma once
 #include "RWGraphics.h"
 #include "RWSpriteSystem.h"
-#include "RWSound.h"
+//#include "RWSound.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -20,37 +20,30 @@ protected:
 	HRESULT					hres;
 	FLOAT					dtime, ttime;
 	WCHAR*					con_in;
+	BYTE					keys[256];
 
 	static RWGraphics*				core;
 	static RWSpriteSystem*			picture;
 	static RWSpriteSystem*			tex;
 	static RWSpriteAlternative*		sprite;
-	static RWSound*					sound;
+//	static RWSound*					sound;
 public:
 	XMFLOAT2				mapsize;
 	XMFLOAT2				startpos;
 	XMFLOAT2				objectpos;
 	UINT					encounter;
 	DOUBLE					speed;
-	INT						anim;
-
-	float SW, SH;
-	bool console;
-	int consoleSwitcher;
-
-	std::wstring AdapterName, buildnum, buildname;
-	std::wstring CurrentLevelName;
+	INT						anim, action;
+	UINT					ScreenWidth = GetSystemMetrics(SM_CXSCREEN), 
+							ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+	std::wstring			AdapterName, buildnum, buildname;
+	std::wstring			CurrentLevelName;
 
 	void ScriptInit(const char* filename);
 
 	static void Initialize(RWGraphics* graphics) {
 		core = graphics;
 	}
-
-	virtual double TranslateData(XMFLOAT2 vec) = 0;
-	virtual void Action(UINT code) = 0;
-	virtual void TranslateRect(UINT width, UINT height) = 0;
-	virtual void GetConsoleInput(WCHAR* input) = 0;
 
 	virtual void Load() = 0;
 	virtual void Unload() = 0;

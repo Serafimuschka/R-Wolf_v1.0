@@ -7,12 +7,7 @@
 #include "RWMainMenu.h"
 #include "RWController.h"
 
-int console = 1;
-float mod = 0.0f;
-float accel = 0.0f;
-
 RWGraphics* graphics;
-RWLevel* lev;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nCmdShow) {
 	WNDCLASSEX wcex;
@@ -42,12 +37,12 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 		hInst,
 		0);
 	if (!windowHandle) {
-		MessageBox(NULL, "Error: 1E :: CreateWindowEx failed", "Excuse me what the fuck?", MB_OK);
+		MessageBox(NULL, "CreateWindowEx failed", "Critical error", MB_ICONWARNING);
 		return -1;
 	}
 	graphics = new RWGraphics();
 	if (!graphics->Init(windowHandle)) {
-		MessageBox(NULL, "Error: 2E :: Initialization failed", "Excuse me what the fuck?", MB_OK);
+		MessageBox(NULL, "Window handle initialization failed", "Critical error", MB_ICONWARNING);
 		delete graphics;
 		return -1;
 	}
@@ -64,89 +59,41 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 	MSG msg;
 	msg.message = WM_NULL;
 	while (msg.message != WM_QUIT) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			DispatchMessage(&msg);
 		}
-		else {
-			GetClientRect(windowHandle, &rc);
-			RWController::CurrentRect(rc.right - rc.left, rc.bottom - rc.top);
-			RWController::Update();
-			graphics->BeginDraw();
-			RWController::Render();
-			graphics->EndDraw();
-		}
+		GetClientRect(windowHandle, &rc);
+		RWController::Update();
+		graphics->BeginDraw();
+		RWController::Render();
+		graphics->EndDraw();
 	}
 
 	delete graphics;
 	return 0;
 }
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	bool keys[256];
+	UINT width, height;
 	switch (msg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
 		break;
 	case WM_SIZE:
-	{
-		UINT width = LOWORD(lParam);
-		UINT height = HIWORD(lParam);
+		width = LOWORD(lParam);
+		height = HIWORD(lParam);
 		graphics->Resize(width, height);
-	}
 		break;
 	case WM_LBUTTONDOWN:
-		// sound
-		RWController::SendAction(RW_ACTION_SHOOT);
+		break;
+	case WM_KEYUP:
+		keys[(BYTE)wParam] = false;
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
-		case VK_UP:
-			RWController::SendCoordinates(XMFLOAT2(0, 1));
-			break;
-		case VK_LEFT:
-			RWController::SendCoordinates(XMFLOAT2(-1, 0));
-			break;
-		case VK_RIGHT:
-			RWController::SendCoordinates(XMFLOAT2(1, 0));
-			break;
-		case VK_DOWN:
-			RWController::SendCoordinates(XMFLOAT2(0, -1));
-			break;
-
-		case 0x57:	// W
-			RWController::SendCoordinates(XMFLOAT2(0, 1));
-			break;
-		case 0x41:	// A
-			RWController::SendCoordinates(XMFLOAT2(-1, 0));
-			break;
-		case 0x44:	// D
-			RWController::SendCoordinates(XMFLOAT2(1, 0));
-			break;
-		case 0x53:	// S
-			RWController::SendCoordinates(XMFLOAT2(0, -1));
-			break;
-
-		case VK_SPACE:
-			RWController::SendAction(RW_ACTION_JUMP);
-			break;
-
-		case VK_SHIFT:
-			break;
-		case VK_CONTROL:
-			break;
-		case VK_F1:
-			MessageBox(NULL, "О проекте\nАвтор: Kalterseele", "About", MB_OK);
-			break;
-		case VK_F11:
-			break;
-		case VK_F12:
-			break;
-		case VK_RETURN:
-			break;
 		case VK_ESCAPE:
 			exit(EXIT_SUCCESS);
-			break;
-		default:
-			//RWController::TranslateSymbol((WCHAR)wParam, wParam);
 			break;
 		}
 		break;

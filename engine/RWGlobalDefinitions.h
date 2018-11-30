@@ -14,11 +14,14 @@
 #define number			PrintNum
 #define button			CreateButton
 #define bar				ProgressBar
-#define obj				Object
+#define obj				logic_DrawEntity
 #define d_info			DEBUG_ShowInfo
 #define d_menu			DEBUG_ShowMenu
 #define d_hware			DEBUG_ShowHardware
+#define d_fps			DEBUG_CountFPS
 #define rw_iface		RW_DrawInterface
+#define SW				ScreenWidth
+#define SH				ScreenHeight
 #endif
 
 // actions enumeration:
@@ -36,4 +39,18 @@ enum Actions {
 	RW_ACTION_USE = 10,
 	RW_ACTION_RUN = 11,
 	RW_ACTION_STEALTH = 12
+};
+
+// entity types structs:
+struct item {
+	LPCWSTR name;
+	double health;
+	double damage;
+};
+
+// entity types enumeration:
+enum item_types {
+	ENTITY_RECT = 0,
+	ENTITY_BULLET = 1,
+	ENTITY_AID = 2
 };

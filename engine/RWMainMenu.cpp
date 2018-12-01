@@ -42,7 +42,7 @@ void RWMainMenu::Render() {
 	sound->open();
 	core->rw_iface("open");
 	picture->Draw(anim, objectpos, 255);
-	tex->Texturize(startpos, mapsize, 25);
+	//tex->Texturize(startpos, mapsize, 25);
 	//sprite->Draw(L"texture.png", core, startpos, 255);
 		// Исполнение кода уровня
 		// ScriptInit("MainMenuScript.xml");

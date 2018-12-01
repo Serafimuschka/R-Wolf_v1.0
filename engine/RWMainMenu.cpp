@@ -11,76 +11,83 @@
 #include "RWPhysicsConstants.h"
 
 void RWMainMenu::Load() {
-	tex = new RWSpriteSystem(L"glass_01.png", core);
+	tex = new RWSpriteSystem(L"texture.png", core);
 	picture = new RWSpriteSystem(L"test.png", core, 128, 128);
 	mapsize = XMFLOAT2(4096, 1024);
 	encounter = 0;
-	objectpos = XMFLOAT2(545, 15);
+	action = 0;
+	objectpos = XMFLOAT2(800, 100);
 	startpos = XMFLOAT2(0, 0);
 	dtime = 0;
 	ttime = 0;
 	buildname = L"Maverick [Pre-Alpha edition]";
 	buildnum = L"0034";
 	con_in = '\0';
-	speed = 3;
-	sound->initialize();
+	speed = pow(G, 0.5);
+	//sound->initialize();
 }
 
 void RWMainMenu::Update(double timeTotal, double timeDelta) {
 	dtime = timeDelta;
 	ttime = timeTotal;
-	int s = ttime;
-	if (s % 3 == 0) anim = 0;
-	//if (objectpos.x <= SW - 15) startpos.x--;
-	//if (objectpos.y <= SH - 15) startpos.y--;
-	//if (objectpos.x >= SW - 143) startpos.x++;
-	//if (objectpos.y >= SH - 143) startpos.y++;
+	if (objectpos.x <= 15) {
+		startpos.x += speed;
+		objectpos.x = 15 - speed/2;
+	}
+	else if (objectpos.x >= SW - 143) {
+		startpos.x -= speed;
+		objectpos.x = SW - 143 - speed/2;
+	}
+	if (objectpos.y <= 15) {
+		startpos.y += speed;
+		objectpos.y = 15 - speed/2;
+	}
+	else if (objectpos.y >= SH - 143) {
+		startpos.y -= speed;
+		objectpos.y = SH - 143 - speed/2;
+	}
+	if (GetAsyncKeyState(VK_UP)) {
+		objectpos.y -= speed;
+		anim = 2;
+	}
+	else if (GetAsyncKeyState(VK_DOWN)) {
+		objectpos.y += speed;
+		anim = 2;
+	}
+	if (GetAsyncKeyState(VK_LEFT)) {
+		objectpos.x -= speed;
+		anim = 2;
+	}
+
+	else if (GetAsyncKeyState(VK_RIGHT)) {
+		objectpos.x += speed;
+		anim = 2;
+	}
+
+	if (GetAsyncKeyState(VK_LBUTTON)) {
+		anim = 1;
+		action = 1;
+	}
+	encounter++;
 }
 
 void RWMainMenu::Render() {
+	core->d_info("count_begin");
 	core->clscr(XMFLOAT3(15, 15, 15));
-	sound->open();
 	core->rw_iface("open");
+	tex->Texturize(startpos, mapsize, 25);
 	picture->Draw(anim, objectpos, 255);
-	//tex->Texturize(startpos, mapsize, 25);
-	//sprite->Draw(L"texture.png", core, startpos, 255);
+	if (action == 1) {
+		item object = { L"rect", 1000, 1000 };
+		core->obj(object, XMFLOAT2(objectpos.x + 144, objectpos.y + 48), XMFLOAT2(1000, 2000), ENTITY_BULLET);
+		action = 1;
+	}
 		// Исполнение кода уровня
-		// ScriptInit("MainMenuScript.xml");
+	ScriptInit("MainMenuScript.xml");
 	core->rw_iface("close");
-	core->d_info(encounter, ttime);
 	core->d_hware(ttime, buildname, buildnum);
 	core->d_menu();
-	core->number(sound->getrecsize(), XMFLOAT2(700, 300), 0, core->RW_Consolas, 25, core->GreenYellow);
-	encounter++;
-	sound->close();
-}
-
-
-double RWMainMenu::TranslateData(XMFLOAT2 vec) {
-	objectpos.x += vec.x * speed;
-	objectpos.y += vec.y * speed;
-	if (vec.x != 0 || vec.y != 0) anim = 2;
-	return 0;
-}
-
-void RWMainMenu::Action(UINT code) {
-	switch (code) {
-	case RW_ACTION_SHOOT:
-		if (anim == 2) anim = 3;
-		else anim = 1;
-		break;
-	case RW_ACTION_JUMP:
-		break;
-	}
-}
-
-void RWMainMenu::TranslateRect(UINT w, UINT h) {
-	SW = w;
-	SH = h;
-}
-
-void RWMainMenu::GetConsoleInput(WCHAR* input) {
-	con_in = input;
+	core->d_info("count_end");
 }
 
 void RWMainMenu::Unload() {

@@ -142,14 +142,12 @@
     <ClCompile Include="RWLevel.cpp" />
     <ClCompile Include="RWScript.cpp" />
     <ClCompile Include="RWSpriteSystem.cpp" />
-    <ClCompile Include="RWSound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGIType.h" />
     <ClInclude Include="RWController.h" />
     <ClInclude Include="RWGraphics.h" />
     <ClInclude Include="RWPhysicsConstants.h" />
-    <ClInclude Include="RWSound.h" />
     <ClInclude Include="RWTimer.h" />
     <ClInclude Include="RWLevel.h" />
     <ClInclude Include="RWMainMenu.h" />

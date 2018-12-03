@@ -1,26 +1,28 @@
-#include <DXGI.h>
-#include <sstream>
-#include <Psapi.h>
-#include "RWGraphics.h"
+//
+//
+//
+//
+//
+//	kalterseele, 2018
+//
 
-#define _RW_USE_PHYSICS_CONSTANTS
-#include "RWPhysicsConstants.h"
+#include "RWGraphics.h"
 
 RWGraphics::RWGraphics() {
 	factory = NULL;
-	wfactory = NULL;
+	wFactory = NULL;
 	RT = NULL;
 	brush = NULL;
 }
 
 RWGraphics::~RWGraphics() {
 	if (factory) factory->Release();
-	if (wfactory) wfactory->Release();
+	if (wFactory) wFactory->Release();
 	if (RT) RT->Release();
 	if (!brush) brush->Release();
 }
 
-bool RWGraphics::Init(HWND windowHandle) {
+bool RWGraphics::init(HWND windowHandle) {
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &factory);
 	if (!SUCCEEDED(hr)) return false;
 	RECT rc;
@@ -34,360 +36,367 @@ bool RWGraphics::Init(HWND windowHandle) {
 				rc.bottom - rc.top)),
 		&RT);
 	if (!SUCCEEDED(hr)) return false;
-	hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(wfactory), reinterpret_cast<IUnknown**>(&wfactory));
+	hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(wFactory),
+		reinterpret_cast<IUnknown**>(&wFactory));
 	if (!SUCCEEDED(hr)) return false;
 	static const WCHAR fontName[] = L"Consolas";
-	hr = wfactory->CreateTextFormat(fontName, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, 12.0f, L"", &textformat);
-	hr = wfactory->CreateTextFormat(fontName, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"", &textformatfps);
+	hr = wFactory->CreateTextFormat(fontName, NULL,
+		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL, 12.0f, L"", &textFormat);
 	if (!SUCCEEDED(hr)) return false;
 	return true;
 }
 
-void RWGraphics::CreateConsole(WCHAR* input) {
-	std::wstringstream wss;
-	LPCWCHAR com;
-	wss << input;
-	com = wss.str().c_str();
-	RT->CreateSolidColorBrush(D2D1::ColorF(30 / 255.0f, 30 / 255.0f, 30 / 255.0f, 100 / 255.0f), &brush);
-	RT->FillRectangle(D2D1::RectF(0, GetSystemMetrics(SM_CYSCREEN) - 100, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)-3), brush);
-	brush->Release();
-	PrintTextManual(com, XMFLOAT2(0, GetSystemMetrics(SM_CYSCREEN) - 100), 12, RW_Consolas, Yellow);
+
+void RWGraphics::clearScreen(XMFLOAT3 color) {
+	RT->Clear(ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f));
 }
 
-void RWGraphics::ClearScreen(XMFLOAT3 color) {
-	RT->Clear(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f));
-}
-
-void RWGraphics::ClearScreen(D2D1_COLOR_F color) {
+void RWGraphics::clearScreen(D2D1_COLOR_F color) {
 	RT->Clear(color);
 }
 
-void RWGraphics::DrawLine(XMFLOAT4 coord, D2D1_COLOR_F color, float thick) {
+void RWGraphics::drawLine(XMFLOAT4 coord, D2D1_COLOR_F color, double thick) {
 	RT->CreateSolidColorBrush(color, &brush);
-	RT->DrawLine(D2D1::Point2F(coord.x, coord.y), D2D1::Point2F(coord.z, coord.w), brush, thick);
+	RT->DrawLine(Point2F(coord.x, coord.y), Point2F(coord.z, coord.w), brush, thick);
 	brush->Release();
 }
 
-void RWGraphics::DrawLine(XMFLOAT4 coord, XMFLOAT4 color, float thick) {
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
-	RT->DrawLine(D2D1::Point2F(coord.x, coord.y), D2D1::Point2F(coord.z, coord.w), brush, thick);
+void RWGraphics::drawLine(XMFLOAT4 coord, XMFLOAT4 color, double thick) {
+	RT->CreateSolidColorBrush(
+		ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
+	RT->DrawLine(Point2F(coord.x, coord.y), Point2F(coord.z, coord.w), brush, thick);
 	brush->Release();
 }
 
-void RWGraphics::DrawCircle(XMFLOAT2 coord, XMFLOAT2 radius, XMFLOAT4 color, float thick, bool fill) {
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
-	switch (fill) {
-	case true:
-		RT->FillEllipse(D2D1::Ellipse(D2D1::Point2F(coord.x, coord.y), radius.x, radius.y), brush);
-		break;
-	case false:
-		RT->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(coord.x, coord.y), radius.x, radius.y), brush, thick);
-		break;
-	}
-	brush->Release();
-}
-
-void RWGraphics::DrawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color, float thick, bool fill) {
-	RT->CreateSolidColorBrush(color, &brush);
-	switch (fill) {
-	case true:
-		RT->FillEllipse(D2D1::Ellipse(D2D1::Point2F(coord.x, coord.y), radius.x, radius.y), brush);
-		break;
-	case false:
-		RT->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(coord.x, coord.y), radius.x, radius.y), brush, thick);
-		break;
-	}
-	brush->Release();
-}
-
-void RWGraphics::DrawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color, float thick, bool fill) {
-	RT->CreateSolidColorBrush(color, &brush);
-	switch (fill) {
-	case true:
-		RT->FillRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush);
-		break;
-	case false:
-		RT->DrawRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush, thick);
-		break;
-	}
-	brush->Release();
-}
-
-void RWGraphics::DrawRectangle(XMFLOAT4 coord, XMFLOAT4 color, float thick, bool fill) {
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
-	switch (fill) {
-	case true:
-		RT->FillRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush);
-		break;
-	case false:
-		RT->DrawRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush, thick);
-		break;
-	}
-	brush->Release();
-}
-
-// Устаревший тип
-void RWGraphics::PrintText(LPWSTR text, int lenght, float x, float y, float r, float g, float b, float a) {
-	r = r / 255.0f;
-	g = g / 255.0f;
-	b = b / 255.0f;
-	a = a / 255.0f;
-	RT->CreateSolidColorBrush(D2D1::ColorF(r, g, b, a), &brush);
-	RT->DrawText(text, lenght, textformat, D2D1::RectF(x, y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
-	brush->Release();
-}
-
-void RWGraphics::PrintText(LPCWSTR text, XMFLOAT2 coord, D2D1_COLOR_F color) {
-	RT->CreateSolidColorBrush(color, &brush);
-	RT->DrawText(text, wcslen(text), textformat, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
-	brush->Release();
-}
-
-void RWGraphics::PrintText(LPCWSTR text, XMFLOAT2 coord, XMFLOAT4 color) {
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
-	RT->DrawText(text, wcslen(text), textformat, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
-	brush->Release();
-}
-
-void RWGraphics::PrintNum(float num, XMFLOAT2 coord, float shift, LPCWSTR font, float size, XMFLOAT4 color, DWRITE_TEXT_ALIGNMENT align) {
-	int input = num;
-	D2D_RECT_F baserect;
-	if (align != DWRITE_TEXT_ALIGNMENT_CENTER) {
-		baserect = D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+void RWGraphics::drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, XMFLOAT4 color,
+	double thick, bool fill) {
+	RT->CreateSolidColorBrush(
+		ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
+	if (fill) {
+		RT->FillEllipse(Ellipse(Point2F(coord.x, coord.y), radius.x, radius.y), brush);
 	}
 	else {
-		baserect = D2D1::RectF(coord.x - shift, coord.y - shift, coord.x + shift, coord.y + shift);
+		RT->DrawEllipse(Ellipse(Point2F(coord.x, coord.y), radius.x, radius.y), brush, thick);
 	}
-	IDWriteTextFormat* textformatmanual;
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x, color.y, color.z, color.w), &brush);
-	wfactory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	textformatmanual->SetTextAlignment(align);
-	std::wstringstream wss;
-	wss << num;
-	RT->DrawText(wss.str().c_str(), (ceil(log10(input + 1))), textformatmanual, &baserect, brush);
 	brush->Release();
-	textformatmanual->Release();
 }
 
-void RWGraphics::PrintNum(float num, XMFLOAT2 coord, float shift, LPCWSTR font, float size, D2D1_COLOR_F color, DWRITE_TEXT_ALIGNMENT align) {
-	int input = num;
-	D2D_RECT_F baserect;
-	if (align != DWRITE_TEXT_ALIGNMENT_CENTER) {
-		baserect = D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+void RWGraphics::drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color,
+	double thick, bool fill) {
+	RT->CreateSolidColorBrush(color, &brush);
+	if (fill) {
+		RT->FillEllipse(Ellipse(Point2F(coord.x, coord.y), radius.x, radius.y), brush);
 	}
 	else {
-		baserect = D2D1::RectF(coord.x - shift, coord.y - shift, coord.x + shift, coord.y + shift);
+		RT->DrawEllipse(Ellipse(Point2F(coord.x, coord.y), radius.x, radius.y), brush, thick);
 	}
-	IDWriteTextFormat* textformatmanual;
+	brush->Release();
+}
+
+void RWGraphics::drawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color, double thick, bool fill) {
 	RT->CreateSolidColorBrush(color, &brush);
-	wfactory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	textformatmanual->SetTextAlignment(align);
-	std::wstringstream wss;
-	wss << num;
-	RT->DrawText(wss.str().c_str(), (ceil(log10(input + 1))), textformatmanual, &baserect, brush);
+	if (fill) {
+		RT->FillRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush);
+	}
+	else {
+		RT->DrawRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush, thick);
+	}
 	brush->Release();
-	textformatmanual->Release();
 }
 
-void RWGraphics::PrintTextManual(LPCWSTR text, int lenght, XMFLOAT2 coord, float size, LPCWSTR family, XMFLOAT4 color) {
-	IDWriteTextFormat* textformatmanual;
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x, color.y, color.z, color.w), &brush);
-	wfactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	RT->DrawTextA(text, lenght, textformatmanual, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+void RWGraphics::drawRectangle(XMFLOAT4 coord, XMFLOAT4 color, double thick, bool fill) {
+	RT->CreateSolidColorBrush(
+		ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
+	if (fill) {
+		RT->FillRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush);
+	}
+	else {
+		RT->DrawRectangle(D2D1::RectF(coord.x, coord.y, coord.z, coord.w), brush, thick);
+	}
 	brush->Release();
-	textformatmanual->Release();
 }
 
-void RWGraphics::PrintTextManual(LPCWSTR text, int lenght, XMFLOAT2 coord, float size, LPCWSTR family, D2D1_COLOR_F color) {
-	IDWriteTextFormat* textformatmanual;
+void RWGraphics::printText(LPCWSTR output, XMFLOAT2 coord, D2D1_COLOR_F color) {
 	RT->CreateSolidColorBrush(color, &brush);
-	wfactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	RT->DrawTextA(text, lenght, textformatmanual, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+	RT->DrawText(output, wcslen(output), textFormat, RectF(coord.x, coord.y,
+		GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
 	brush->Release();
-	textformatmanual->Release();
 }
 
-void RWGraphics::PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, D2D1_COLOR_F color) {
-	IDWriteTextFormat* textformatmanual;
+void RWGraphics::printText(LPCWSTR output, XMFLOAT2 coord, XMFLOAT4 color) {
+	RT->CreateSolidColorBrush(
+		ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
+	RT->DrawText(output, wcslen(output), textFormat, RectF(coord.x, coord.y,
+		GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+	brush->Release();
+}
+
+void RWGraphics::printNum(double output, XMFLOAT2 coord, double shift,
+	LPCWSTR font, double size, XMFLOAT4 color, DWRITE_TEXT_ALIGNMENT align) {
+	IDWriteTextFormat* textFormatManual;
+	D2D_RECT_F baserect;
+	wstringstream wss;
+	
+	wss << output;
+
+	if (align != DWRITE_TEXT_ALIGNMENT_CENTER) {
+		baserect = RectF(coord.x, coord.y,
+			GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+	}
+	else {
+		baserect = RectF(coord.x - shift, coord.y - shift,
+			coord.x + shift, coord.y + shift);
+	}
+
+	RT->CreateSolidColorBrush(ColorF(color.x, color.y, color.z, color.w), &brush);
+	wFactory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textFormatManual);
+
+	textFormatManual->SetTextAlignment(align);
+	RT->DrawText(wss.str().c_str(), wcslen(wss.str().c_str()), textFormatManual, &baserect, brush);
+	brush->Release();
+	textFormatManual->Release();
+}
+
+void RWGraphics::printNum(double output, XMFLOAT2 coord, double shift,
+	LPCWSTR font, double size, D2D1_COLOR_F color, DWRITE_TEXT_ALIGNMENT align) {
+	IDWriteTextFormat* textFormatManual;
+	D2D_RECT_F baserect;
+	wstringstream wss;
+
+	wss << output;
+
+	if (align != DWRITE_TEXT_ALIGNMENT_CENTER) {
+		baserect = RectF(coord.x, coord.y,
+			GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+	}
+	else {
+		baserect = RectF(coord.x - shift, coord.y - shift,
+			coord.x + shift, coord.y + shift);
+	}
+
 	RT->CreateSolidColorBrush(color, &brush);
-	wfactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	RT->DrawTextA(text, wcslen(text), textformatmanual, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+	wFactory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textFormatManual);
+
+	textFormatManual->SetTextAlignment(align);
+	RT->DrawText(wss.str().c_str(), wcslen(wss.str().c_str()), textFormatManual, &baserect, brush);
 	brush->Release();
-	textformatmanual->Release();
+	textFormatManual->Release();
 }
 
-void RWGraphics::PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, XMFLOAT4 color) {
-	IDWriteTextFormat* textformatmanual;
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x/255.0f, color.y/255.0f, color.z/255.0f, color.w/255.0f), &brush);
-	wfactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, size, L"", &textformatmanual);
-	RT->DrawTextA(text, wcslen(text), textformatmanual, D2D1::RectF(coord.x, coord.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+void RWGraphics::printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
+	LPCWSTR family, D2D1_COLOR_F color) {
+	IDWriteTextFormat* textFormatManual;
+
+	RT->CreateSolidColorBrush(color, &brush);
+	wFactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textFormatManual);
+	RT->DrawText(output, wcslen(output), textFormatManual, RectF(coord.x, coord.y,
+		GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
 	brush->Release();
-	textformatmanual->Release();
+	textFormatManual->Release();
 }
 
-void RWGraphics::CreateButton(LPCWSTR name, LPCWSTR text, XMFLOAT2 coord, XMFLOAT2 size, UINT id, HINSTANCE hInst) {
-	HWND handleButton = CreateWindow((LPCSTR)name,
-		(LPCSTR)text,
-		WS_VISIBLE | WS_CHILD,
-		coord.x, coord.y, size.x, size.y,
-		mainHWND,
-		(HMENU)id,
-		hInst,
-		NULL);
+void RWGraphics::printTextManual(LPCWSTR text, XMFLOAT2 coord, double size,
+	LPCWSTR family, XMFLOAT4 color) {
+	IDWriteTextFormat* textFormatManual;
+
+	RT->CreateSolidColorBrush(
+		ColorF(color.x/255.0f, color.y/255.0f, color.z/255.0f, color.w/255.0f), &brush);
+	wFactory->CreateTextFormat(family, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL, size, L"", &textFormatManual);
+	RT->DrawText(text, wcslen(text), textFormatManual, RectF(coord.x, coord.y,
+		GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), brush);
+	brush->Release();
+	textFormatManual->Release();
 }
 
-void RWGraphics::ProgressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval, double curval, D2D1_COLOR_F color) {
+void RWGraphics::progressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval,
+	double curval, D2D1_COLOR_F color) {
 	double curr = size.x * (curval / (maxval * 0.01)) / 100;
 	if (curr >= size.x) curr = size.x;
 
 	D2D1_COLOR_F clr;
-	if (curr < 0.3 * size.x) clr = YellowGreen;
-	else if (curr >= 0.3 * size.x && curr < 0.7 * size.x) clr = Yellow;
-	else if (curr >= 0.7 * size.x) clr = Red;
+	if (curr < 0.3 * size.x) clr = yellowGreen;
+	else if (curr >= 0.3 * size.x && curr < 0.7 * size.x) clr = yellow;
+	else if (curr >= 0.7 * size.x) clr = red;
 
-	DrawRectangle(XMFLOAT4(coord.x, coord.y, coord.x + size.x, coord.y + size.y), color, 1);
-	DrawRectangle(XMFLOAT4(coord.x, coord.y, coord.x + curr, coord.y + size.y), color, 1, true);
-	DrawLine(XMFLOAT4(coord.x + curr, coord.y - 5, coord.x + curr, coord.y + size.y + 5), clr, 2);
-	PrintNum(curval, XMFLOAT2(coord.x + curr, coord.y - 8), size.y, RW_Roboto, size.y, clr, DWRITE_TEXT_ALIGNMENT_CENTER);
-	PrintNum(maxval, XMFLOAT2(coord.x + size.x + 5, coord.y), size.y, RW_Roboto, size.y, color);
+	rect(XMFLOAT4(coord.x, coord.y,
+		coord.x + size.x, coord.y + size.y), color, 1.0f);
+	rect(XMFLOAT4(coord.x, coord.y,
+		coord.x + curr, coord.y + size.y), color, 1.0f, true);
+	line(XMFLOAT4(coord.x + curr, coord.y - 5,
+		coord.x + curr, coord.y + size.y + 5), clr, 2.0f);
+	textnum(curval, XMFLOAT2(coord.x + curr, coord.y - 8),
+		size.y, RW_Roboto, size.y, clr, DWRITE_TEXT_ALIGNMENT_CENTER);
+	textnum(maxval, XMFLOAT2(coord.x + size.x + 5, coord.y),
+		size.y, RW_Roboto, size.y, color);
 }
 
-void RWGraphics::ProgressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval, double curval, XMFLOAT4 color) {
+void RWGraphics::progressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval,
+	double curval, XMFLOAT4 color) {
 	double curr = size.x * (curval / (maxval * 0.01)) / 100;
 	if (curr >= size.x) curr = size.x;
 
 	D2D1_COLOR_F clr;
-	if (curr < 0.3 * size.x) clr = YellowGreen;
-	else if (curr >= 0.3 * size.x && curr < 0.7 * size.x) clr = Yellow;
-	else if (curr >= 0.7 * size.x) clr = Red;
+	if (curr < 0.3 * size.x) clr = yellowGreen;
+	else if (curr >= 0.3 * size.x && curr < 0.7 * size.x) clr = yellow;
+	else if (curr >= 0.7 * size.x) clr = red;
 
-	DrawRectangle(XMFLOAT4(coord.x, coord.y, coord.x + size.x, coord.y + size.y), color, 1);
-	DrawRectangle(XMFLOAT4(coord.x, coord.y, coord.x + curr, coord.y + size.y), color, 1, true);
-	DrawLine(XMFLOAT4(curr, coord.y - 5, curr, size.y + 5), clr, 2);
-	PrintNum(curval, XMFLOAT2(coord.x + curr, coord.y - 8), size.y, RW_Roboto, size.y, clr, DWRITE_TEXT_ALIGNMENT_CENTER);
-	PrintNum(maxval, XMFLOAT2(coord.x + size.x + 5, coord.y), size.y, RW_Roboto, size.y, color);
+	rect(XMFLOAT4(coord.x, coord.y,
+		coord.x + size.x, coord.y + size.y), color, 1.0f);
+	rect(XMFLOAT4(coord.x, coord.y,
+		coord.x + curr, coord.y + size.y), color, 1.0f, true);
+	line(XMFLOAT4(curr, coord.y - 5,
+		curr, size.y + 5), clr, 2.0f);
+	textnum(curval, XMFLOAT2(coord.x + curr,
+		coord.y - 8), size.y, RW_Roboto, size.y, clr, DWRITE_TEXT_ALIGNMENT_CENTER);
+	textnum(maxval, XMFLOAT2(coord.x + size.x + 5, coord.y),
+		size.y, RW_Roboto, size.y, color);
 }
 
-void RWGraphics::DrawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC, D2D1_COLOR_F color, float thick) {
-	DrawLine(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), color, thick);
-	DrawLine(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), color, thick);
-	DrawLine(XMFLOAT4(pointC.x, pointC.y, pointA.x, pointA.y), color, thick);
+void RWGraphics::drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC,
+	D2D1_COLOR_F color, double thick) {
+	line(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), color, thick);
+	line(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), color, thick);
+	line(XMFLOAT4(pointC.x, pointC.y, pointA.x, pointA.y), color, thick);
 }
 
-void RWGraphics::DrawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC, XMFLOAT4 color, float thick) {
-	DrawLine(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), color, thick);
-	DrawLine(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), color, thick);
-	DrawLine(XMFLOAT4(pointC.x, pointC.y, pointA.x, pointA.y), color, thick);
+void RWGraphics::drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC,
+	XMFLOAT4 color, double thick) {
+	line(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), color, thick);
+	line(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), color, thick);
+	line(XMFLOAT4(pointC.x, pointC.y, pointA.x, pointA.y), color, thick);
 }
 
-void RWGraphics::DrawArc(XMFLOAT2 center, XMFLOAT2 radius, D2D1_COLOR_F color, float angle, float thick) {
+void RWGraphics::drawArc(XMFLOAT2 center, XMFLOAT2 radius, D2D1_COLOR_F color,
+	double angle, double thick) {
 	ID2D1GeometrySink* sink;
 	XMFLOAT2 add = XMFLOAT2(0, 0);
 	int k = 1;
+
 	RT->CreateSolidColorBrush(color, &brush);
 	factory->CreatePathGeometry(&path);
 	path->Open(&sink);
-	sink->BeginFigure(D2D1::Point2F(center.x - radius.x, center.y), D2D1_FIGURE_BEGIN_FILLED);
+	sink->BeginFigure(Point2F(center.x - radius.x, center.y), D2D1_FIGURE_BEGIN_FILLED);
+
 	if ((angle > 90) && (angle < 180)) {
 		angle -= 90;
 	}
-	sink->AddArc(D2D1::ArcSegment(D2D1::Point2F(center.x + radius.x * cos((180 - angle) * 3.14159265 / 180), center.y - radius.y * sin((180 - angle) * 3.14159265 / 180)), D2D1::SizeF(radius.x, radius.y), angle, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
-	RT->DrawLine(D2D1::Point2F(center.x, center.y), D2D1::Point2F(center.x + radius.x * cos((180 - angle) * 3.14159265 / 180), center.y - k * radius.y * sin((180 - angle) * 3.14159265 / 180)), brush, thick);
+
+	sink->AddArc(ArcSegment(Point2F(
+		center.x + radius.x * cos((180 - angle) * PI / 180),
+		center.y - radius.y * sin((180 - angle) * PI / 180)),
+		SizeF(radius.x, radius.y), angle,
+		D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	RT->DrawLine(Point2F(center.x, center.y),
+		Point2F(center.x + radius.x * cos((180 - angle) * PI / 180),
+			center.y - k * radius.y * sin((180 - angle) * PI / 180)), brush, thick);
 	sink->EndFigure(D2D1_FIGURE_END_OPEN);
 	sink->Close();
-	RT->DrawGeometry(path, brush, thick);
+
 	if (angle > 180) {
-		sink->AddArc(D2D1::ArcSegment(D2D1::Point2F(center.x - radius.x * cos((angle) * 3.14159265 / 180), center.y + radius.y * sin((angle) * 3.14159265 / 180)), D2D1::SizeF(radius.x, radius.y), angle, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+		sink->AddArc(ArcSegment(
+			Point2F(center.x - radius.x * cos((angle) * PI / 180),
+				center.y + radius.y * sin((angle) * PI / 180)),
+			SizeF(radius.x, radius.y), angle,
+			D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
 	}
+
+	RT->DrawGeometry(path, brush, thick);
 	brush->Release();
 	sink->Release();
 	path->Release();
 }
 
-void RWGraphics::DrawArc(XMFLOAT2 center, XMFLOAT2 radius, XMFLOAT4 color, float angle, float thick) {
+void RWGraphics::drawArc(XMFLOAT2 center, XMFLOAT2 radius, XMFLOAT4 color,
+	double angle, double thick) {
 	ID2D1GeometrySink* sink;
 	XMFLOAT2 arg;
 	int k = 1;
 	arg.x = angle * (PI / 180);
 	arg.y = arg.x;
+
 	if (angle > 90) {
 		arg.y -= 90;
 		k *= -1;
 	}
-	RT->CreateSolidColorBrush(D2D1::ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
+
+	RT->CreateSolidColorBrush(
+		ColorF(color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f), &brush);
 	factory->CreatePathGeometry(&path);
 	path->Open(&sink);
-	sink->BeginFigure(D2D1::Point2F(center.x - radius.x, center.y), D2D1_FIGURE_BEGIN_FILLED);
-	sink->AddArc(D2D1::ArcSegment(D2D1::Point2F(center.x - cosf(arg.x)*radius.x, center.y - k * sinf(arg.y)*radius.y), D2D1::SizeF(radius.x, radius.y), 0, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->BeginFigure(Point2F(center.x - radius.x, center.y), D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddArc(ArcSegment(
+		Point2F(center.x - cosf(arg.x) * radius.x, center.y - k * sinf(arg.y) * radius.y),
+		SizeF(radius.x, radius.y), 0, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
 	sink->EndFigure(D2D1_FIGURE_END_OPEN);
 	sink->Close();
+
 	RT->DrawGeometry(path, brush, thick);
 	brush->Release();
 	sink->Release();
 	path->Release();
 }
 
-void RWGraphics::logic_DrawEntity(item entity, XMFLOAT2 coord, XMFLOAT2 properties, int type) {
+void RWGraphics::drawEntity(Item obj, XMFLOAT2 coord, XMFLOAT2 properties, int type) {
 	switch (type) {
 	case ENTITY_RECT:
-		rect(XMFLOAT4(coord.x, coord.y, 50, 50), Black, 1, true);
+		rect(XMFLOAT4(coord.x, coord.y, 50, 50), black, 1.0f, true);
 		break;
 	case ENTITY_BULLET:
-		rect(XMFLOAT4(coord.x, coord.y - 2.5, coord.x + 15, coord.y + 2.5), OrangeRed, 1, true);
+		rect(XMFLOAT4(coord.x, coord.y - 2.5, coord.x + 15, coord.y + 2.5), orangeRed, 1.0f, true);
 	}
 }
 
-VOID RWGraphics::DEBUG_ShowInfo(const char* argv) {
+void RWGraphics::showInfo(const char* argv) {
 	MEMORYSTATUSEX msex;
-	double oldTime, newTime, delta, elapsed = 0, frame = 0, fps;
-	msex.dwLength = sizeof(msex);
-	GlobalMemoryStatusEx(&msex);
-	unsigned long long int memoryAll = msex.ullAvailPhys / 1024 / 1024;
 	PROCESS_MEMORY_COUNTERS memCounter;
+	msex.dwLength = sizeof(msex);
+
+	GlobalMemoryStatusEx(&msex);
+	unsigned long long int memoryAll = msex.ullAvailPhys / pow(1024, 2);
+
 	GetProcessMemoryInfo(GetCurrentProcess(), &memCounter, sizeof(PROCESS_MEMORY_COUNTERS));
-	UINT mem = memCounter.WorkingSetSize / 1024 / 1024;
-	UINT memp = memCounter.PeakWorkingSetSize / 1024 / 1024;
 
-	DrawLine(XMFLOAT4(15, 35, 35, 15), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(35, 15, 530, 15), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(530, 15, 530, 35), DeepSkyBlue, 2);
-	DrawRectangle(XMFLOAT4(15, 35, 530, 100), DeepSkyBlue, 2);
+	line(XMFLOAT4(15, 35, 35, 15), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(35, 15, 530, 15), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(530, 15, 530, 35), deepSkyBlue, 2.0f);
+	rect(XMFLOAT4(15, 35, 530, 100), deepSkyBlue, 2.0f);
 
-	PrintTextManual(L"Используемая/пиковая ОЗУ и FPS:", XMFLOAT2(45, 15), 16, RW_Consolas, DeepSkyBlue);
+	textman(L"Используемая/пиковая ОЗУ и FPS:", XMFLOAT2(45, 15), 16.0f,
+		RW_Consolas, deepSkyBlue);
 
-	ProgressBar(XMFLOAT2(35, 65), XMFLOAT2(200, 20), memp, mem, DeepSkyBlue);
-	ProgressBar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, 60, DeepSkyBlue);
+	bar(XMFLOAT2(35, 65), XMFLOAT2(200, 20),
+		memCounter.PeakWorkingSetSize / pow(1024, 2),
+		memCounter.WorkingSetSize / pow(1024, 2), deepSkyBlue);
+	bar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, 60, deepSkyBlue);
 }
 
-VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::wstring b_num) {
-
+void RWGraphics::showHardware(double timerIn, std::wstring b_name, std::wstring b_num) {
+	wstring text;
+	IDXGIFactory1* pFactory;
+	IDXGIAdapter1* Adapter;
+	DXGI_ADAPTER_DESC1 Desc;
+	wstringstream wss;
 	int hour = timerIn / 3600,
 		min = timerIn / 60,
 		sec = timerIn;
 
-	DrawLine(XMFLOAT4(15, 150, 35, 130), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(35, 130, 530, 130), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(530, 130, 530, 150), DeepSkyBlue, 2);
-	DrawRectangle(XMFLOAT4(15, 150, 530, 235), DeepSkyBlue, 2);
+	line(XMFLOAT4(15, 150, 35, 130), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(35, 130, 530, 130), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(530, 130, 530, 150), deepSkyBlue, 2.0f);
+	rect(XMFLOAT4(15, 150, 530, 235), deepSkyBlue, 2.0f);
 
-	PrintTextManual(L"Информационный блок:", XMFLOAT2(45, 130), 16, RW_Consolas, DeepSkyBlue);
+	textman(L"Информационный блок:", XMFLOAT2(45, 130), 16.0f, RW_Consolas, deepSkyBlue);
 
-	std::wstring text;
-	IDXGIFactory1* pFactory;
 	HRESULT hr = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)(&pFactory));
-	IDXGIAdapter1* Adapter;
 	pFactory->EnumAdapters1(0, &Adapter);
-	DXGI_ADAPTER_DESC1 Desc;
 	Adapter->GetDesc1(&Desc);
-	std::wstringstream wss;
 	wss << Desc.Description;
-	std::wstring AdapterName = wss.str().c_str();
+	wstring AdapterName = wss.str().c_str();
 	wss.str(L"");
 	Adapter->Release();
 	pFactory->Release();
@@ -416,29 +425,36 @@ VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::ws
 	text += wss.str().c_str();
 	wss.str(L"");
 
-	PrintTextManual(text.c_str(), XMFLOAT2(25, 155), 15, RW_Consolas, DeepSkyBlue);
+	textman(text.c_str(), XMFLOAT2(25, 155), 15.0f, RW_Consolas, deepSkyBlue);
 }
 
-VOID RWGraphics::DEBUG_ShowMenu() {
-	DrawLine(XMFLOAT4(15, 265, 530, 265), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(15, 265, 15, 285), DeepSkyBlue, 2);
-	DrawLine(XMFLOAT4(530, 265, 530, 285), DeepSkyBlue, 2);
+void RWGraphics::showMenu() {
+	line(XMFLOAT4(15, 265, 530, 265), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(15, 265, 15, 285), deepSkyBlue, 2.0f);
+	line(XMFLOAT4(530, 265, 530, 285), deepSkyBlue, 2.0f);
 
-	PrintTextManual(L"Панель инструментов:", XMFLOAT2(45, 265), 16, RW_Consolas, DeepSkyBlue);
-
-	DrawRectangle(XMFLOAT4(15, 295, 530, GetSystemMetrics(SM_CYSCREEN) - 15), DeepSkyBlue, 2);
+	textman(L"Панель инструментов:", XMFLOAT2(45, 265), 16.0f, RW_Consolas, deepSkyBlue);
+	rect(XMFLOAT4(15, 295, 530, GetSystemMetrics(SM_CYSCREEN) - 15), deepSkyBlue, 2.0f);
 }
 
-VOID RWGraphics::RW_DrawInterface(const char* argv) {
+void RWGraphics::drawInterface(const char* argv) {
 	if (argv == "open") {
-		DrawRectangle(XMFLOAT4(545, 15, GetSystemMetrics(SM_CXSCREEN) - 15, GetSystemMetrics(SM_CYSCREEN) - 15), DeepSkyBlue, 2);
+		rect(XMFLOAT4(545, 15, GetSystemMetrics(SM_CXSCREEN) - 15,
+			GetSystemMetrics(SM_CYSCREEN) - 15), deepSkyBlue, 2.0f);
 	}
 
 	if (argv == "close") {
-		DrawRectangle(XMFLOAT4(0, 0, 545, GetSystemMetrics(SM_CYSCREEN)), XMFLOAT4(15, 15, 15, 255), 1, true);
-		DrawRectangle(XMFLOAT4(545, 0, GetSystemMetrics(SM_CXSCREEN), 15), XMFLOAT4(15, 15, 15, 255), 1, true);
-		DrawRectangle(XMFLOAT4(545, GetSystemMetrics(SM_CYSCREEN) - 15, GetSystemMetrics(SM_CXSCREEN) - 15, GetSystemMetrics(SM_CYSCREEN)), XMFLOAT4(15, 15, 15, 255), 1, true);
-		DrawRectangle(XMFLOAT4(GetSystemMetrics(SM_CXSCREEN) - 15, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), XMFLOAT4(15, 15, 15, 255), 1, true);
-		DrawRectangle(XMFLOAT4(545, 15, GetSystemMetrics(SM_CXSCREEN) - 15, GetSystemMetrics(SM_CYSCREEN) - 15), DeepSkyBlue, 2);
+		rect(XMFLOAT4(0, 0, 545, GetSystemMetrics(SM_CYSCREEN)),
+			XMFLOAT4(15, 15, 15, 255), 1.0f, true);
+		rect(XMFLOAT4(545, 0, GetSystemMetrics(SM_CXSCREEN), 15),
+			XMFLOAT4(15, 15, 15, 255), 1.0f, true);
+		rect(XMFLOAT4(545, GetSystemMetrics(SM_CYSCREEN) - 15,
+			GetSystemMetrics(SM_CXSCREEN) - 15, GetSystemMetrics(SM_CYSCREEN)),
+			XMFLOAT4(15, 15, 15, 255), 1.0f, true);
+		rect(XMFLOAT4(GetSystemMetrics(SM_CXSCREEN) - 15, 0,
+			GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)),
+			XMFLOAT4(15, 15, 15, 255), 1.0f, true);
+		rect(XMFLOAT4(545, 15, GetSystemMetrics(SM_CXSCREEN) - 15,
+			GetSystemMetrics(SM_CYSCREEN) - 15), deepSkyBlue, 2.0f);
 	}
 }

@@ -11,9 +11,9 @@ public:
 		LARGE_INTEGER t;
 		QueryPerformanceFrequency(&t);
 		frequency = t.QuadPart;
-		Reset();
+		reset();
 	}
-	void Reset() {
+	void reset() {
 		LARGE_INTEGER t;
 		if (!QueryPerformanceCounter(&t)) {
 			MessageBox(NULL, "Ошибка вычисления FPS", "RW: ERROR", MB_OK);
@@ -23,17 +23,17 @@ public:
 		currentCallToUpdate = t.QuadPart;
 		lastCallToUpdate = t.QuadPart;
 	}
-	void Update() {
+	void update() {
 		lastCallToUpdate = currentCallToUpdate;
 		LARGE_INTEGER t;
 		QueryPerformanceCounter(&t);
 		currentCallToUpdate = t.QuadPart;
 	}
-	double GetTimeTotal() {
+	double getTimeTotal() {
 		double d = currentCallToUpdate - startTime;
 		return d / frequency;
 	}
-	double GetTimeDelta() {
+	double getTimeDelta() {
 		double d = currentCallToUpdate - lastCallToUpdate;
 		return d / frequency;
 	}

@@ -1,32 +1,39 @@
-#include <Windows.h>
-#include <wchar.h>
-#include "resource.h"
-#include "RWGlobalDefinitions.h"
-#include "RWGraphics.h"
-#include "RWLevel.h"
-#include "RW-Demo-3D-UI.h"
-#include "RWController.h"
+//
+//
+//
+//
+//
+//	kalterseele, 2018
+//
 
-RWGraphics* graphics;
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#include "RWHeaders.h"
+#include "RW-Demo-3D-UI.h"
+
+RWGraphics* gfx;
+
+LRESULT CALLBACK windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nCmdShow) {
 	WNDCLASSEX wcex;
-								ZeroMemory(&wcex, sizeof(WNDCLASSEX));
-	wcex.cbSize					= sizeof(WNDCLASSEX);
-	wcex.hIcon					= LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
-	wcex.hbrBackground			= (HBRUSH)COLOR_WINDOW;
-	wcex.hInstance				= hInst;
-	wcex.lpfnWndProc			= WindowProc;
-	wcex.lpszClassName			= "RWolf";
-	wcex.style					= CS_HREDRAW | CS_VREDRAW;
+	ZeroMemory(&wcex, sizeof(WNDCLASSEX));
+	wcex.cbSize	=				sizeof(WNDCLASSEX);
+	wcex.hIcon =				LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.hbrBackground =		(HBRUSH)COLOR_WINDOW;
+	wcex.hInstance =			hInst;
+	wcex.lpfnWndProc =			windowProc;
+	wcex.lpszClassName =		"RWolf";
+	wcex.style =				CS_HREDRAW | CS_VREDRAW;
 	RegisterClassEx(&wcex);
+	
+	RECT rc = { 0, 0,
+		GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 
-	RECT rc = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 	AdjustWindowRectEx(&rc, WS_OVERLAPPEDWINDOW, false, WS_EX_OVERLAPPEDWINDOW);
+
 	HWND windowHandle = CreateWindowEx(
 		WS_EX_OVERLAPPEDWINDOW,
 		"RWolf",
-		"R-Wolf 2DGE ",
+		"R-Wolf 2D Graphics Engine",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -36,59 +43,51 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 		NULL,
 		hInst,
 		0);
+
 	if (!windowHandle) {
 		MessageBox(NULL, "CreateWindowEx failed", "Critical error", MB_ICONWARNING);
-		return -1;
+		return EXIT_FAILURE;
 	}
-	graphics = new RWGraphics();
-	if (!graphics->Init(windowHandle)) {
+
+	gfx = new RWGraphics();
+
+	if (!gfx->init(windowHandle)) {
 		MessageBox(NULL, "Window handle initialization failed", "Critical error", MB_ICONWARNING);
-		delete graphics;
-		return -1;
+		delete gfx;
+		return EXIT_FAILURE;
 	}
-	graphics->GetCurrentMainHWND(windowHandle);
+
 	SetWindowLong(windowHandle, GWL_STYLE, WS_POPUP);
 	SetWindowLong(windowHandle, GWL_EXSTYLE, WS_EX_TOPMOST);
 	ShowWindow(windowHandle, SW_SHOWMAXIMIZED);
 	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
-	RWLevel::Initialize(graphics);
-	RWController::Initialize();
-	RWController::LoadInitialLevel(new RWDemo_3DUI());
+	RWLevel::initialize(gfx);
+	RWController::initialize();
+	RWController::loadInitialLevel(new RWDemo_3DUI());
 	
 	MSG msg;
 	msg.message = WM_NULL;
+
 	while (msg.message != WM_QUIT) {
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			DispatchMessage(&msg);
 		}
 		GetClientRect(windowHandle, &rc);
-		RWController::Update();
-		graphics->BeginDraw();
-		RWController::Render();
-		graphics->EndDraw();
+		RWController::update();
+		gfx->beginDraw();
+		RWController::render();
+		gfx->endDraw();
 	}
 
-	delete graphics;
-	return 0;
+	delete gfx;
+	return EXIT_SUCCESS;
 }
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-	bool keys[256];
-	UINT width, height;
+
+LRESULT CALLBACK windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-		break;
 	case WM_SIZE:
-		width = LOWORD(lParam);
-		height = HIWORD(lParam);
-		graphics->Resize(width, height);
-		break;
-	case WM_LBUTTONDOWN:
-		break;
-	case WM_KEYUP:
-		keys[(BYTE)wParam] = false;
+		gfx->resize(LOWORD(lParam), HIWORD(lParam));
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
@@ -96,7 +95,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			exit(EXIT_SUCCESS);
 			break;
 		}
-		break;
 	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }

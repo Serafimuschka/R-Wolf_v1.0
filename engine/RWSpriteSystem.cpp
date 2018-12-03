@@ -41,7 +41,7 @@ RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx) {
 		WICBitmapPaletteTypeCustom);
 
 	// Конвертация в формат ID2D1Bitmap:
-	gfx->GetRenderTarget()->CreateBitmapFromWicBitmap(
+	gfx->getRenderTarget()->CreateBitmapFromWicBitmap(
 		wicConverter,
 		NULL,
 		&bmp);
@@ -56,7 +56,8 @@ RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx) {
 	spriteHeight = bmp->GetSize().height;
 	spritesAcross = 1;
 }
-RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx, int spriteWidth, int spriteHeight):
+RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx,
+	int spriteWidth, int spriteHeight):
 	RWSpriteSystem::RWSpriteSystem(filename, gfx)
 {
 	this->spriteHeight = spriteHeight;
@@ -67,17 +68,19 @@ RWSpriteSystem::~RWSpriteSystem() {
 	if (bmp) bmp->Release();
 }
 // Функция Draw(FLOAT X, Y): рисует заданное изображение на сцене в заданных координатах
-void RWSpriteSystem::Draw(float x, float y) {
-	gfx->GetRenderTarget()->DrawBitmap(
+void RWSpriteSystem::draw(XMFLOAT2 coord) {
+	gfx->getRenderTarget()->DrawBitmap(
 		bmp,
-		D2D1::RectF(x, y, x + bmp->GetSize().width, y + bmp->GetSize().height),
+		RectF(coord.x, coord.y,
+			coord.x + bmp->GetSize().width, coord.y + bmp->GetSize().height),
 		1.0f,
 		D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR,
-		D2D1::RectF(x, y, x + bmp->GetSize().width, y + bmp->GetSize().height)
+		RectF(coord.x, coord.y,
+			coord.x + bmp->GetSize().width, coord.y + bmp->GetSize().height)
 	);
 }
 // Функция Draw(INT INDEX, X, Y): перегруженный аналог Draw(). Работает с покадровой анимацией
-void RWSpriteSystem::Draw(int index, XMFLOAT2 coord, double opacity) {
+void RWSpriteSystem::draw(int index, XMFLOAT2 coord, double opacity) {
 	opacity /= 255.0f;
 	D2D_RECT_F src = D2D1::RectF(
 			(index % spritesAcross) * spriteWidth,
@@ -87,7 +90,7 @@ void RWSpriteSystem::Draw(int index, XMFLOAT2 coord, double opacity) {
 	);
 	D2D_RECT_F dest = D2D1::RectF(
 		coord.x, coord.y, coord.x + spriteWidth, coord.y + spriteHeight);
-	gfx->GetRenderTarget()->DrawBitmap(
+	gfx->getRenderTarget()->DrawBitmap(
 		bmp,
 		dest,
 		opacity,
@@ -96,27 +99,30 @@ void RWSpriteSystem::Draw(int index, XMFLOAT2 coord, double opacity) {
 	);
 }
 
-void RWSpriteSystem::Texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity) {
+void RWSpriteSystem::texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity) {
 	int indexA = mapsize.x / spriteWidth;
 	int indexB = mapsize.y / spriteHeight;
 
 	for (int it = 0; it < indexB; it++) {
 		for (int i = 0; i < indexA; i++) {
-			Draw(0, XMFLOAT2(coord.x + i * spriteWidth, coord.y + it * spriteHeight), opacity);
+			draw(0, XMFLOAT2(coord.x + i * spriteWidth, coord.y + it * spriteHeight), opacity);
 		}
 	}
 }
 
-void RWSpriteAlternative::Draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity) {
-	syst->Draw(0, coord, opacity);
+void RWSpriteAlternative::draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity) {
+	syst->draw(0, coord, opacity);
 }
 
-void RWSpriteAlternative::Draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index, XMFLOAT2 size, XMFLOAT2 coord, double opacity) {
-	syst->Draw(index, coord, opacity);
+void RWSpriteAlternative::draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index,
+	XMFLOAT2 size, XMFLOAT2 coord, double opacity) {
+	syst->draw(index, coord, opacity);
 }
 
-void RWSpriteAlternative::Texturize(LPCWSTR filename, RWGraphics* gfx, XMFLOAT4 rect, double opacity) {
+void RWSpriteAlternative::texturize(LPCWSTR filename, RWGraphics* gfx,
+	XMFLOAT4 rectangle, double opacity) {
 	syst = new RWSpriteSystem(filename, gfx);
-	syst->Texturize(XMFLOAT2(rect.x, rect.y), XMFLOAT2(rect.z, rect.w), opacity);
+	syst->texturize(XMFLOAT2(rectangle.x, rectangle.y),
+		XMFLOAT2(rectangle.z, rectangle.w), opacity);
 	delete syst;
 }

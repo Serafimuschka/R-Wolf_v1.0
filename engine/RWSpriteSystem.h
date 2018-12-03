@@ -12,15 +12,16 @@ public:
 	RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx);
 	RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx, int spriteWidth, int spriteHeight);
 	~RWSpriteSystem();
-	void Draw(float x, float y);
-	void Draw(int index, XMFLOAT2 coord, double opacity);
-	void Texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity);
+	void draw(XMFLOAT2 coord);
+	void draw(int index, XMFLOAT2 coord, double opacity);
+	void texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity);
 };
 
 class RWSpriteAlternative {
 	RWSpriteSystem*		syst;
 public:
-	void Draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity);
-	void Draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index, XMFLOAT2 size, XMFLOAT2 coord, double opacity);
-	void Texturize(LPCWSTR filename, RWGraphics* gfx, XMFLOAT4 rect, double opacity);
+	void draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity);
+	void draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index,
+		XMFLOAT2 size, XMFLOAT2 coord, double opacity);
+	void texturize(LPCWSTR filename, RWGraphics* gfx, XMFLOAT4 rectangle, double opacity);
 };

@@ -1,261 +1,286 @@
+//
+//
+//
+//
+//
+//	kalterseele, 2018
+//
+
 #pragma once
+
 #include <Windows.h>
+#include <Psapi.h>
+#include <wchar.h>
 #include <D2D1.h>
+#include <DXGI.h>
 #include <DWrite.h>
 #include <xnamath.h>
+#include <iostream>
 #include <string>
+#include <sstream>
+
+#define _RW_USE_PHYSICS_CONSTANTS
+#include "RWPhysicsConstants.h"
 
 #define _RW_USE_GLOBAL_DEFINITIONS
 #include "RWGlobalDefinitions.h"
 
-#define rwfont std::wstring
+using namespace D2D1;
+using namespace std;
+
+#define rwfont					wstring
+#define RT						renderTarget
 
 class RWGraphics {
-	HWND						mainHWND;
 	ID2D1Factory*				factory;
-	IDWriteFactory*				wfactory;
-	IDWriteTextFormat*			textformat;
-	IDWriteTextFormat*			textformatfps;
-	ID2D1HwndRenderTarget*		RT;
+	IDWriteFactory*				wFactory;
+	IDWriteTextFormat*			textFormat;
+	ID2D1HwndRenderTarget*		renderTarget;
 	ID2D1SolidColorBrush*		brush;
 	ID2D1PathGeometry*			path;
 public:
-		// White -> Black
-	D2D1_COLOR_F	White = D2D1::ColorF(D2D1::ColorF::White);
-	D2D1_COLOR_F	Snow = D2D1::ColorF(D2D1::ColorF::Snow);
-	D2D1_COLOR_F	Honeydew = D2D1::ColorF(D2D1::ColorF::Honeydew);
-	D2D1_COLOR_F	MintCream = D2D1::ColorF(D2D1::ColorF::MintCream);
-	D2D1_COLOR_F	Azure = D2D1::ColorF(D2D1::ColorF::Azure);
-	D2D1_COLOR_F	AliceBlue = D2D1::ColorF(D2D1::ColorF::AliceBlue);
-	D2D1_COLOR_F	GhostWhite = D2D1::ColorF(D2D1::ColorF::GhostWhite);
-	D2D1_COLOR_F	WhiteSmoke = D2D1::ColorF(D2D1::ColorF::WhiteSmoke);
-	D2D1_COLOR_F	SeaShell = D2D1::ColorF(D2D1::ColorF::SeaShell);
-	D2D1_COLOR_F	Beige = D2D1::ColorF(D2D1::ColorF::Beige);
-	D2D1_COLOR_F	OldLace = D2D1::ColorF(D2D1::ColorF::OldLace);
-	D2D1_COLOR_F	FloralWhite = D2D1::ColorF(D2D1::ColorF::FloralWhite);
-	D2D1_COLOR_F	Ivory = D2D1::ColorF(D2D1::ColorF::Ivory);
-	D2D1_COLOR_F	AntiqueWhite = D2D1::ColorF(D2D1::ColorF::AntiqueWhite);
-	D2D1_COLOR_F	Linen = D2D1::ColorF(D2D1::ColorF::Linen);
-	D2D1_COLOR_F	MistyRose = D2D1::ColorF(D2D1::ColorF::MistyRose);
-	D2D1_COLOR_F	LavenderBlush = D2D1::ColorF(D2D1::ColorF::LavenderBlush);
-	D2D1_COLOR_F	Gainsboro = D2D1::ColorF(D2D1::ColorF::Gainsboro);
-	D2D1_COLOR_F	LightGray = D2D1::ColorF(D2D1::ColorF::LightGray);
-	D2D1_COLOR_F	Silver = D2D1::ColorF(D2D1::ColorF::Silver);
-	D2D1_COLOR_F	DarkGray = D2D1::ColorF(D2D1::ColorF::DarkGray);
-	D2D1_COLOR_F	Gray = D2D1::ColorF(D2D1::ColorF::Gray);
-	D2D1_COLOR_F	DimGray = D2D1::ColorF(D2D1::ColorF::DimGray);
-	D2D1_COLOR_F	LightSlateGray = D2D1::ColorF(D2D1::ColorF::LightSlateGray);
-	D2D1_COLOR_F	SlateGray = D2D1::ColorF(D2D1::ColorF::SlateGray);
-	D2D1_COLOR_F	DarkSlateGray = D2D1::ColorF(D2D1::ColorF::DarkSlateGray);
-	D2D1_COLOR_F	Black = D2D1::ColorF(D2D1::ColorF::Black);
-		// Other colors (Red -> Blue):
-	D2D1_COLOR_F	IndianRed = D2D1::ColorF(D2D1::ColorF::IndianRed);
-	D2D1_COLOR_F	LightCoral = D2D1::ColorF(D2D1::ColorF::LightCoral);
-	D2D1_COLOR_F	Salmon = D2D1::ColorF(D2D1::ColorF::Salmon);
-	D2D1_COLOR_F	DarkSalmon = D2D1::ColorF(D2D1::ColorF::DarkSalmon);
-	D2D1_COLOR_F	LightSalmon = D2D1::ColorF(D2D1::ColorF::LightSalmon);
-	D2D1_COLOR_F	Crimson = D2D1::ColorF(D2D1::ColorF::Crimson);
-	D2D1_COLOR_F	Red = D2D1::ColorF(D2D1::ColorF::Red);
-	D2D1_COLOR_F	Firebrick = D2D1::ColorF(D2D1::ColorF::Firebrick);
-	D2D1_COLOR_F	DarkRed = D2D1::ColorF(D2D1::ColorF::DarkRed);
-	D2D1_COLOR_F	Pink = D2D1::ColorF(D2D1::ColorF::Pink);
-	D2D1_COLOR_F	LightPink = D2D1::ColorF(D2D1::ColorF::LightPink);
-	D2D1_COLOR_F	HotPink = D2D1::ColorF(D2D1::ColorF::HotPink);
-	D2D1_COLOR_F	DeepPink = D2D1::ColorF(D2D1::ColorF::DeepPink);
-	D2D1_COLOR_F	MediumVioletRed = D2D1::ColorF(D2D1::ColorF::MediumVioletRed);
-	D2D1_COLOR_F	PaleVioletRed = D2D1::ColorF(D2D1::ColorF::PaleVioletRed);
-	D2D1_COLOR_F	Coral = D2D1::ColorF(D2D1::ColorF::Coral);
-	D2D1_COLOR_F	Tomato = D2D1::ColorF(D2D1::ColorF::Tomato);
-	D2D1_COLOR_F	OrangeRed = D2D1::ColorF(D2D1::ColorF::OrangeRed);
-	D2D1_COLOR_F	DarkOrange = D2D1::ColorF(D2D1::ColorF::DarkOrange);
-	D2D1_COLOR_F	Orange = D2D1::ColorF(D2D1::ColorF::Orange);
-	D2D1_COLOR_F	Gold = D2D1::ColorF(D2D1::ColorF::Gold);
-	D2D1_COLOR_F	Yellow = D2D1::ColorF(D2D1::ColorF::Yellow);
-	D2D1_COLOR_F	LightYellow = D2D1::ColorF(D2D1::ColorF::LightYellow);
-	D2D1_COLOR_F	LemonChiffon = D2D1::ColorF(D2D1::ColorF::LemonChiffon);
-	D2D1_COLOR_F	LightGoldenrodYellow = D2D1::ColorF(D2D1::ColorF::LightGoldenrodYellow);
-	D2D1_COLOR_F	PapayaWhip = D2D1::ColorF(D2D1::ColorF::PapayaWhip);
-	D2D1_COLOR_F	Moccasin = D2D1::ColorF(D2D1::ColorF::Moccasin);
-	D2D1_COLOR_F	PeachPuff = D2D1::ColorF(D2D1::ColorF::PeachPuff);
-	D2D1_COLOR_F	PaleGoldenrod = D2D1::ColorF(D2D1::ColorF::PaleGoldenrod);
-	D2D1_COLOR_F	Khaki = D2D1::ColorF(D2D1::ColorF::Khaki);
-	D2D1_COLOR_F	Lavender = D2D1::ColorF(D2D1::ColorF::Lavender);
-	D2D1_COLOR_F	Thistle = D2D1::ColorF(D2D1::ColorF::Thistle);
-	D2D1_COLOR_F	Plum = D2D1::ColorF(D2D1::ColorF::Plum);
-	D2D1_COLOR_F	Violet = D2D1::ColorF(D2D1::ColorF::Violet);
-	D2D1_COLOR_F	Orchid = D2D1::ColorF(D2D1::ColorF::Orchid);
-	D2D1_COLOR_F	Magenta = D2D1::ColorF(D2D1::ColorF::Magenta);
-	D2D1_COLOR_F	MediumOrchid = D2D1::ColorF(D2D1::ColorF::MediumOrchid);
-	D2D1_COLOR_F	MediumPurple = D2D1::ColorF(D2D1::ColorF::MediumPurple);
-	D2D1_COLOR_F	BlueViolet = D2D1::ColorF(D2D1::ColorF::BlueViolet);
-	D2D1_COLOR_F	DarkViolet = D2D1::ColorF(D2D1::ColorF::DarkViolet);
-	D2D1_COLOR_F	DarkOrchid = D2D1::ColorF(D2D1::ColorF::DarkOrchid);
-	D2D1_COLOR_F	DarkMagenta = D2D1::ColorF(D2D1::ColorF::DarkMagenta);
-	D2D1_COLOR_F	Purple = D2D1::ColorF(D2D1::ColorF::Purple);
-	D2D1_COLOR_F	Indigo = D2D1::ColorF(D2D1::ColorF::Indigo);
-	D2D1_COLOR_F	SlateBlue = D2D1::ColorF(D2D1::ColorF::SlateBlue);
-	D2D1_COLOR_F	DarkSlateBlue = D2D1::ColorF(D2D1::ColorF::DarkSlateBlue);
-	D2D1_COLOR_F	Cornsilk = D2D1::ColorF(D2D1::ColorF::Cornsilk);
-	D2D1_COLOR_F	BlanchedAlmond = D2D1::ColorF(D2D1::ColorF::BlanchedAlmond);
-	D2D1_COLOR_F	Bisque = D2D1::ColorF(D2D1::ColorF::Bisque);
-	D2D1_COLOR_F	NavajoWhite = D2D1::ColorF(D2D1::ColorF::NavajoWhite);
-	D2D1_COLOR_F	Wheat = D2D1::ColorF(D2D1::ColorF::Wheat);
-	D2D1_COLOR_F	BurlyWood = D2D1::ColorF(D2D1::ColorF::BurlyWood);
-	D2D1_COLOR_F	Tan = D2D1::ColorF(D2D1::ColorF::Tan);
-	D2D1_COLOR_F	RosyBrown = D2D1::ColorF(D2D1::ColorF::RosyBrown);
-	D2D1_COLOR_F	SandyBrown = D2D1::ColorF(D2D1::ColorF::SandyBrown);
-	D2D1_COLOR_F	Goldenrod = D2D1::ColorF(D2D1::ColorF::Goldenrod);
-	D2D1_COLOR_F	DarkGoldenrod = D2D1::ColorF(D2D1::ColorF::DarkGoldenrod);
-	D2D1_COLOR_F	Peru = D2D1::ColorF(D2D1::ColorF::Peru);
-	D2D1_COLOR_F	Chocolate = D2D1::ColorF(D2D1::ColorF::Chocolate);
-	D2D1_COLOR_F	SaddleBrown = D2D1::ColorF(D2D1::ColorF::SaddleBrown);
-	D2D1_COLOR_F	Sienna = D2D1::ColorF(D2D1::ColorF::Sienna);
-	D2D1_COLOR_F	Brown = D2D1::ColorF(D2D1::ColorF::Brown);
-	D2D1_COLOR_F	Maroon = D2D1::ColorF(D2D1::ColorF::Maroon);
-	D2D1_COLOR_F	GreenYellow = D2D1::ColorF(D2D1::ColorF::GreenYellow);
-	D2D1_COLOR_F	Chartreuse = D2D1::ColorF(D2D1::ColorF::Chartreuse);
-	D2D1_COLOR_F	LawnGreen = D2D1::ColorF(D2D1::ColorF::LawnGreen);
-	D2D1_COLOR_F	Lime = D2D1::ColorF(D2D1::ColorF::Lime);
-	D2D1_COLOR_F	LimeGreen = D2D1::ColorF(D2D1::ColorF::LimeGreen);
-	D2D1_COLOR_F	PaleGreen = D2D1::ColorF(D2D1::ColorF::PaleGreen);
-	D2D1_COLOR_F	LightGreen = D2D1::ColorF(D2D1::ColorF::LightGreen);
-	D2D1_COLOR_F	MediumSpringGreen = D2D1::ColorF(D2D1::ColorF::MediumSpringGreen);
-	D2D1_COLOR_F	SpringGreen = D2D1::ColorF(D2D1::ColorF::SpringGreen);
-	D2D1_COLOR_F	MediumSeaGreen = D2D1::ColorF(D2D1::ColorF::MediumSeaGreen);
-	D2D1_COLOR_F	SeaGreen = D2D1::ColorF(D2D1::ColorF::SeaGreen);
-	D2D1_COLOR_F	ForestGreen = D2D1::ColorF(D2D1::ColorF::ForestGreen);
-	D2D1_COLOR_F	Green = D2D1::ColorF(D2D1::ColorF::Green);
-	D2D1_COLOR_F	DarkGreen = D2D1::ColorF(D2D1::ColorF::DarkGreen);
-	D2D1_COLOR_F	YellowGreen = D2D1::ColorF(D2D1::ColorF::YellowGreen);
-	D2D1_COLOR_F	OliveDrab = D2D1::ColorF(D2D1::ColorF::OliveDrab);
-	D2D1_COLOR_F	Olive = D2D1::ColorF(D2D1::ColorF::Olive);
-	D2D1_COLOR_F	DarkOliveGreen = D2D1::ColorF(D2D1::ColorF::DarkOliveGreen);
-	D2D1_COLOR_F	MediumAquamarine = D2D1::ColorF(D2D1::ColorF::MediumAquamarine);
-	D2D1_COLOR_F	DarkSeaGreen = D2D1::ColorF(D2D1::ColorF::DarkSeaGreen);
-	D2D1_COLOR_F	LightSeaGreen = D2D1::ColorF(D2D1::ColorF::LightSeaGreen);
-	D2D1_COLOR_F	DarkCyan = D2D1::ColorF(D2D1::ColorF::DarkCyan);
-	D2D1_COLOR_F	Teal = D2D1::ColorF(D2D1::ColorF::Teal);
-	D2D1_COLOR_F	Cyan = D2D1::ColorF(D2D1::ColorF::Cyan);
-	D2D1_COLOR_F	LightCyan = D2D1::ColorF(D2D1::ColorF::LightCyan);
-	D2D1_COLOR_F	PaleTurquoise = D2D1::ColorF(D2D1::ColorF::PaleTurquoise);
-	D2D1_COLOR_F	Aquamarine = D2D1::ColorF(D2D1::ColorF::Aquamarine);
-	D2D1_COLOR_F	Turquoise = D2D1::ColorF(D2D1::ColorF::Turquoise);
-	D2D1_COLOR_F	MediumTurquoise = D2D1::ColorF(D2D1::ColorF::MediumTurquoise);
-	D2D1_COLOR_F	DarkTurquoise = D2D1::ColorF(D2D1::ColorF::DarkTurquoise);
-	D2D1_COLOR_F	CadetBlue = D2D1::ColorF(D2D1::ColorF::CadetBlue);
-	D2D1_COLOR_F	SteelBlue = D2D1::ColorF(D2D1::ColorF::SteelBlue);
-	D2D1_COLOR_F	LightSteelBlue = D2D1::ColorF(D2D1::ColorF::LightSteelBlue);
-	D2D1_COLOR_F	PowderBlue = D2D1::ColorF(D2D1::ColorF::PowderBlue);
-	D2D1_COLOR_F	LightBlue = D2D1::ColorF(D2D1::ColorF::LightBlue);
-	D2D1_COLOR_F	SkyBlue = D2D1::ColorF(D2D1::ColorF::SkyBlue);
-	D2D1_COLOR_F	LightSkyBlue = D2D1::ColorF(D2D1::ColorF::LightSkyBlue);
-	D2D1_COLOR_F	DeepSkyBlue = D2D1::ColorF(D2D1::ColorF::DeepSkyBlue);
-	D2D1_COLOR_F	DodgerBlue = D2D1::ColorF(D2D1::ColorF::DodgerBlue);
-	D2D1_COLOR_F	CornflowerBlue = D2D1::ColorF(D2D1::ColorF::CornflowerBlue);
-	D2D1_COLOR_F	MediumSlateBlue = D2D1::ColorF(D2D1::ColorF::MediumSlateBlue);
-	D2D1_COLOR_F	RoyalBlue = D2D1::ColorF(D2D1::ColorF::RoyalBlue);
-	D2D1_COLOR_F	Blue = D2D1::ColorF(D2D1::ColorF::Blue);
-	D2D1_COLOR_F	MediumBlue = D2D1::ColorF(D2D1::ColorF::MediumBlue);
-	D2D1_COLOR_F	DarkBlue = D2D1::ColorF(D2D1::ColorF::DarkBlue);
-	D2D1_COLOR_F	Navy = D2D1::ColorF(D2D1::ColorF::Navy);
-	D2D1_COLOR_F	MidnightBlue = D2D1::ColorF(D2D1::ColorF::MidnightBlue);
-	ID2D1RenderTarget* GetRenderTarget() {
-		return RT;
-	}
+	D2D1_COLOR_F	white = ColorF(ColorF::White);
+	D2D1_COLOR_F	snow = ColorF(ColorF::Snow);
+	D2D1_COLOR_F	honeydew = ColorF(ColorF::Honeydew);
+	D2D1_COLOR_F	mintCream = ColorF(ColorF::MintCream);
+	D2D1_COLOR_F	azure = ColorF(ColorF::Azure);
+	D2D1_COLOR_F	aliceBlue = ColorF(ColorF::AliceBlue);
+	D2D1_COLOR_F	ghostWhite = ColorF(ColorF::GhostWhite);
+	D2D1_COLOR_F	whiteSmoke = ColorF(ColorF::WhiteSmoke);
+	D2D1_COLOR_F	seaShell = ColorF(ColorF::SeaShell);
+	D2D1_COLOR_F	beige = ColorF(ColorF::Beige);
+	D2D1_COLOR_F	oldLace = ColorF(ColorF::OldLace);
+	D2D1_COLOR_F	floralWhite = ColorF(ColorF::FloralWhite);
+	D2D1_COLOR_F	ivory = ColorF(ColorF::Ivory);
+	D2D1_COLOR_F	antiqueWhite = ColorF(ColorF::AntiqueWhite);
+	D2D1_COLOR_F	linen = ColorF(ColorF::Linen);
+	D2D1_COLOR_F	mistyRose = ColorF(ColorF::MistyRose);
+	D2D1_COLOR_F	lavenderBlush = ColorF(ColorF::LavenderBlush);
+	D2D1_COLOR_F	gainsboro = ColorF(ColorF::Gainsboro);
+	D2D1_COLOR_F	lightGray = ColorF(ColorF::LightGray);
+	D2D1_COLOR_F	silver = ColorF(ColorF::Silver);
+	D2D1_COLOR_F	darkGray = ColorF(ColorF::DarkGray);
+	D2D1_COLOR_F	gray = ColorF(ColorF::Gray);
+	D2D1_COLOR_F	dimGray = ColorF(ColorF::DimGray);
+	D2D1_COLOR_F	lightSlateGray = ColorF(ColorF::LightSlateGray);
+	D2D1_COLOR_F	slateGray = ColorF(ColorF::SlateGray);
+	D2D1_COLOR_F	darkSlateGray = ColorF(ColorF::DarkSlateGray);
+	D2D1_COLOR_F	black = ColorF(ColorF::Black);
+	D2D1_COLOR_F	indianRed = ColorF(ColorF::IndianRed);
+	D2D1_COLOR_F	lightCoral = ColorF(ColorF::LightCoral);
+	D2D1_COLOR_F	salmon = ColorF(ColorF::Salmon);
+	D2D1_COLOR_F	darkSalmon = ColorF(ColorF::DarkSalmon);
+	D2D1_COLOR_F	lightSalmon = ColorF(ColorF::LightSalmon);
+	D2D1_COLOR_F	crimson = ColorF(ColorF::Crimson);
+	D2D1_COLOR_F	red = ColorF(ColorF::Red);
+	D2D1_COLOR_F	firebrick = ColorF(ColorF::Firebrick);
+	D2D1_COLOR_F	darkRed = ColorF(ColorF::DarkRed);
+	D2D1_COLOR_F	pink = ColorF(ColorF::Pink);
+	D2D1_COLOR_F	lightPink = ColorF(ColorF::LightPink);
+	D2D1_COLOR_F	hotPink = ColorF(ColorF::HotPink);
+	D2D1_COLOR_F	deepPink = ColorF(ColorF::DeepPink);
+	D2D1_COLOR_F	mediumVioletRed = ColorF(ColorF::MediumVioletRed);
+	D2D1_COLOR_F	paleVioletRed = ColorF(ColorF::PaleVioletRed);
+	D2D1_COLOR_F	coral = ColorF(ColorF::Coral);
+	D2D1_COLOR_F	tomato = ColorF(ColorF::Tomato);
+	D2D1_COLOR_F	orangeRed = ColorF(ColorF::OrangeRed);
+	D2D1_COLOR_F	darkOrange = ColorF(ColorF::DarkOrange);
+	D2D1_COLOR_F	orange = ColorF(ColorF::Orange);
+	D2D1_COLOR_F	gold = ColorF(ColorF::Gold);
+	D2D1_COLOR_F	yellow = ColorF(ColorF::Yellow);
+	D2D1_COLOR_F	lightYellow = ColorF(ColorF::LightYellow);
+	D2D1_COLOR_F	lemonChiffon = ColorF(ColorF::LemonChiffon);
+	D2D1_COLOR_F	lightGoldenrodYellow = ColorF(ColorF::LightGoldenrodYellow);
+	D2D1_COLOR_F	papayaWhip = ColorF(ColorF::PapayaWhip);
+	D2D1_COLOR_F	moccasin = ColorF(ColorF::Moccasin);
+	D2D1_COLOR_F	peachPuff = ColorF(ColorF::PeachPuff);
+	D2D1_COLOR_F	paleGoldenrod = ColorF(ColorF::PaleGoldenrod);
+	D2D1_COLOR_F	khaki = ColorF(ColorF::Khaki);
+	D2D1_COLOR_F	lavender = ColorF(ColorF::Lavender);
+	D2D1_COLOR_F	thistle = ColorF(ColorF::Thistle);
+	D2D1_COLOR_F	plum = ColorF(ColorF::Plum);
+	D2D1_COLOR_F	violet = ColorF(ColorF::Violet);
+	D2D1_COLOR_F	orchid = ColorF(ColorF::Orchid);
+	D2D1_COLOR_F	magenta = ColorF(ColorF::Magenta);
+	D2D1_COLOR_F	mediumOrchid = ColorF(ColorF::MediumOrchid);
+	D2D1_COLOR_F	mediumPurple = ColorF(ColorF::MediumPurple);
+	D2D1_COLOR_F	blueViolet = ColorF(ColorF::BlueViolet);
+	D2D1_COLOR_F	darkViolet = ColorF(ColorF::DarkViolet);
+	D2D1_COLOR_F	darkOrchid = ColorF(ColorF::DarkOrchid);
+	D2D1_COLOR_F	darkMagenta = ColorF(ColorF::DarkMagenta);
+	D2D1_COLOR_F	purple = ColorF(ColorF::Purple);
+	D2D1_COLOR_F	indigo = ColorF(ColorF::Indigo);
+	D2D1_COLOR_F	slateBlue = ColorF(ColorF::SlateBlue);
+	D2D1_COLOR_F	darkSlateBlue = ColorF(ColorF::DarkSlateBlue);
+	D2D1_COLOR_F	cornsilk = ColorF(ColorF::Cornsilk);
+	D2D1_COLOR_F	blanchedAlmond = ColorF(ColorF::BlanchedAlmond);
+	D2D1_COLOR_F	bisque = ColorF(ColorF::Bisque);
+	D2D1_COLOR_F	navajoWhite = ColorF(ColorF::NavajoWhite);
+	D2D1_COLOR_F	wheat = ColorF(ColorF::Wheat);
+	D2D1_COLOR_F	burlyWood = ColorF(ColorF::BurlyWood);
+	D2D1_COLOR_F	tan = ColorF(ColorF::Tan);
+	D2D1_COLOR_F	rosyBrown = ColorF(ColorF::RosyBrown);
+	D2D1_COLOR_F	sandyBrown = ColorF(ColorF::SandyBrown);
+	D2D1_COLOR_F	goldenrod = ColorF(ColorF::Goldenrod);
+	D2D1_COLOR_F	darkGoldenrod = ColorF(ColorF::DarkGoldenrod);
+	D2D1_COLOR_F	peru = ColorF(ColorF::Peru);
+	D2D1_COLOR_F	chocolate = ColorF(ColorF::Chocolate);
+	D2D1_COLOR_F	saddleBrown = ColorF(ColorF::SaddleBrown);
+	D2D1_COLOR_F	sienna = ColorF(ColorF::Sienna);
+	D2D1_COLOR_F	brown = ColorF(ColorF::Brown);
+	D2D1_COLOR_F	maroon = ColorF(ColorF::Maroon);
+	D2D1_COLOR_F	greenYellow = ColorF(ColorF::GreenYellow);
+	D2D1_COLOR_F	chartreuse = ColorF(ColorF::Chartreuse);
+	D2D1_COLOR_F	lawnGreen = ColorF(ColorF::LawnGreen);
+	D2D1_COLOR_F	lime = ColorF(ColorF::Lime);
+	D2D1_COLOR_F	limeGreen = ColorF(ColorF::LimeGreen);
+	D2D1_COLOR_F	paleGreen = ColorF(ColorF::PaleGreen);
+	D2D1_COLOR_F	lightGreen = ColorF(ColorF::LightGreen);
+	D2D1_COLOR_F	mediumSpringGreen = ColorF(ColorF::MediumSpringGreen);
+	D2D1_COLOR_F	springGreen = ColorF(ColorF::SpringGreen);
+	D2D1_COLOR_F	mediumSeaGreen = ColorF(ColorF::MediumSeaGreen);
+	D2D1_COLOR_F	seaGreen = ColorF(ColorF::SeaGreen);
+	D2D1_COLOR_F	forestGreen = ColorF(ColorF::ForestGreen);
+	D2D1_COLOR_F	green = ColorF(ColorF::Green);
+	D2D1_COLOR_F	darkGreen = ColorF(ColorF::DarkGreen);
+	D2D1_COLOR_F	yellowGreen = ColorF(ColorF::YellowGreen);
+	D2D1_COLOR_F	oliveDrab = ColorF(ColorF::OliveDrab);
+	D2D1_COLOR_F	olive = ColorF(ColorF::Olive);
+	D2D1_COLOR_F	darkOliveGreen = ColorF(ColorF::DarkOliveGreen);
+	D2D1_COLOR_F	mediumAquamarine = ColorF(ColorF::MediumAquamarine);
+	D2D1_COLOR_F	darkSeaGreen = ColorF(ColorF::DarkSeaGreen);
+	D2D1_COLOR_F	lightSeaGreen = ColorF(ColorF::LightSeaGreen);
+	D2D1_COLOR_F	darkCyan = ColorF(ColorF::DarkCyan);
+	D2D1_COLOR_F	teal = ColorF(ColorF::Teal);
+	D2D1_COLOR_F	cyan = ColorF(ColorF::Cyan);
+	D2D1_COLOR_F	lightCyan = ColorF(ColorF::LightCyan);
+	D2D1_COLOR_F	paleTurquoise = ColorF(ColorF::PaleTurquoise);
+	D2D1_COLOR_F	aquamarine = ColorF(ColorF::Aquamarine);
+	D2D1_COLOR_F	turquoise = ColorF(ColorF::Turquoise);
+	D2D1_COLOR_F	mediumTurquoise = ColorF(ColorF::MediumTurquoise);
+	D2D1_COLOR_F	darkTurquoise = ColorF(ColorF::DarkTurquoise);
+	D2D1_COLOR_F	cadetBlue = ColorF(ColorF::CadetBlue);
+	D2D1_COLOR_F	steelBlue = ColorF(ColorF::SteelBlue);
+	D2D1_COLOR_F	lightSteelBlue = ColorF(ColorF::LightSteelBlue);
+	D2D1_COLOR_F	powderBlue = ColorF(ColorF::PowderBlue);
+	D2D1_COLOR_F	lightBlue = ColorF(ColorF::LightBlue);
+	D2D1_COLOR_F	skyBlue = ColorF(ColorF::SkyBlue);
+	D2D1_COLOR_F	lightSkyBlue = ColorF(ColorF::LightSkyBlue);
+	D2D1_COLOR_F	deepSkyBlue = ColorF(ColorF::DeepSkyBlue);
+	D2D1_COLOR_F	dodgerBlue = ColorF(ColorF::DodgerBlue);
+	D2D1_COLOR_F	cornflowerBlue = ColorF(ColorF::CornflowerBlue);
+	D2D1_COLOR_F	mediumSlateBlue = ColorF(ColorF::MediumSlateBlue);
+	D2D1_COLOR_F	royalBlue = ColorF(ColorF::RoyalBlue);
+	D2D1_COLOR_F	blue = ColorF(ColorF::Blue);
+	D2D1_COLOR_F	mediumBlue = ColorF(ColorF::MediumBlue);
+	D2D1_COLOR_F	darkBlue = ColorF(ColorF::DarkBlue);
+	D2D1_COLOR_F	navy = ColorF(ColorF::Navy);
+	D2D1_COLOR_F	midnightBlue = ColorF(ColorF::MidnightBlue);
 
-	rwfont		Agency = L"Agency FB";
-	rwfont		AgencyCyrillic = L"Agency FB Cyrillic";
-	rwfont		Alien = L"Alien Encounters(RUS BY LYAJKA)";
-	rwfont		Arial = L"Arial";
-	rwfont		B52 = L"B52";
-	rwfont		Consolas = L"Consolas";
-	rwfont		Digital7 = L"Digital-7 Mono";
-	rwfont		Fixedsys = L"Fixedsys";
-	rwfont		GOST = L"GOST type A";
-	rwfont		HoloLens = L"HoloLens MDL2 Assets";
-	rwfont		Roboto = L"Roboto Thin";
-	rwfont		Larabiefont = L"Larabiefont Free";
-	rwfont		Segoe = L"Segoe MDL2 Assets";
-	rwfont		System = L"System";
-	rwfont		Symbol = L"Symbol type A";
-	rwfont		Terminal = L"Terminal";
+	rwfont			agency = L"Agency FB";
+	rwfont			agencyCyrillic = L"Agency FB Cyrillic";
+	rwfont			alien = L"Alien Encounters(RUS BY LYAJKA)";
+	rwfont			arial = L"Arial";
+	rwfont			b52 = L"B52";
+	rwfont			consolas = L"Consolas";
+	rwfont			digital7 = L"Digital-7 Mono";
+	rwfont			fixedsys = L"Fixedsys";
+	rwfont			gost = L"GOST type A";
+	rwfont			holoLens = L"HoloLens MDL2 Assets";
+	rwfont			roboto = L"Roboto Thin";
+	rwfont			larabiefont = L"Larabiefont Free";
+	rwfont			segoe = L"Segoe MDL2 Assets";
+	rwfont			system = L"System";
+	rwfont			symbol = L"Symbol type A";
+	rwfont			terminal = L"Terminal";
 
-	LPCWSTR		RW_Agency = Agency.c_str();
-	LPCWSTR		RW_AgencyCyrillic = AgencyCyrillic.c_str();
-	LPCWSTR		RW_Alien = Alien.c_str();
-	LPCWSTR		RW_Arial = Arial.c_str();
-	LPCWSTR		RW_B52 = B52.c_str();
-	LPCWSTR		RW_Consolas = Consolas.c_str();
-	LPCWSTR		RW_Digital7 = Digital7.c_str();
-	LPCWSTR		RW_Fixedsys = Fixedsys.c_str();
-	LPCWSTR		RW_GOST = GOST.c_str();
-	LPCWSTR		RW_HoloLens = HoloLens.c_str();
-	LPCWSTR		RW_Roboto = Roboto.c_str();
-	LPCWSTR		RW_Larabiefont = Larabiefont.c_str();
-	LPCWSTR		RW_Segoe = Segoe.c_str();
-	LPCWSTR		RW_System = System.c_str();
-	LPCWSTR		RW_Symbol = Symbol.c_str();
-	LPCWSTR		RW_Terminal = Terminal.c_str();
+	LPCWSTR			RW_Agency = agency.c_str();
+	LPCWSTR			RW_AgencyCyrillic = agencyCyrillic.c_str();
+	LPCWSTR			RW_Alien = alien.c_str();
+	LPCWSTR			RW_Arial = arial.c_str();
+	LPCWSTR			RW_B52 = b52.c_str();
+	LPCWSTR			RW_Consolas = consolas.c_str();
+	LPCWSTR			RW_Digital7 = digital7.c_str();
+	LPCWSTR			RW_Fixedsys = fixedsys.c_str();
+	LPCWSTR			RW_GOST = gost.c_str();
+	LPCWSTR			RW_HoloLens = holoLens.c_str();
+	LPCWSTR			RW_Roboto = roboto.c_str();
+	LPCWSTR			RW_Larabiefont = larabiefont.c_str();
+	LPCWSTR			RW_Segoe = segoe.c_str();
+	LPCWSTR			RW_System = system.c_str();
+	LPCWSTR			RW_Symbol = symbol.c_str();
+	LPCWSTR			RW_Terminal = terminal.c_str();
 
 	RWGraphics();
 	~RWGraphics();
 
-	bool Init(HWND windowHandle);
-	void BeginDraw() {
+	ID2D1RenderTarget* getRenderTarget() {
+		return RT;
+	}
+
+	bool init(HWND windowHandle);
+
+	void beginDraw() {
 		RT->BeginDraw();
 	}
-	void EndDraw() {
+	void endDraw() {
 		RT->EndDraw();
 	}
 
-	void CreateConsole(WCHAR* input);
+	void clearScreen(XMFLOAT3 color);
+	void clearScreen(D2D1_COLOR_F color);
 
-	void CreateButton(LPCWSTR name, LPCWSTR text, XMFLOAT2 coord, XMFLOAT2 size, UINT id, HINSTANCE hInst = GetModuleHandle(NULL));
-
-	void GetCurrentMainHWND(HWND hWindow) {
-		mainHWND = hWindow;
+	void resize(UINT width, UINT height) {
+		RT->Resize(SizeU(width, height));
 	}
 
-	void ClearScreen(XMFLOAT3 color);
-	void ClearScreen(D2D1_COLOR_F color);
-	void Resize(UINT width, UINT height) {
-		RT->Resize(D2D1::SizeU(width, height));
-	}
+	void drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, XMFLOAT4 color,
+		double thick, bool fill = false);
+	void drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color,
+		double thick, bool fill = false);
 
-	void DrawCircle(XMFLOAT2 coord, XMFLOAT2 radius, XMFLOAT4 color, float thick, bool fill = false);
-	void DrawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color, float thick, bool fill = false);
+	void drawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color,
+		double thick, bool fill = false);
+	void drawRectangle(XMFLOAT4 coord, XMFLOAT4 color,
+		double thick, bool fill = false);
 
-	void DrawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color, float thick, bool fill = false);
-	void DrawRectangle(XMFLOAT4 coord, XMFLOAT4 color, float thick, bool fill = false);
+	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
+		double maxval, double curval, D2D1_COLOR_F color);
+	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
+		double maxval, double curval, XMFLOAT4 color);
 
-	void ProgressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval, double curval, D2D1_COLOR_F color);
-	void ProgressBar(XMFLOAT2 coord, XMFLOAT2 size, double maxval, double curval, XMFLOAT4 color);
+	void drawLine(XMFLOAT4 coord, D2D1_COLOR_F color, double thick = 1.0f);
+	void drawLine(XMFLOAT4 coord, XMFLOAT4 color, double thick = 1.0f);
 
-	void DrawLine(XMFLOAT4 coord, D2D1_COLOR_F color, float thick = 1);
-	void DrawLine(XMFLOAT4 coord, XMFLOAT4 color, float thick = 1);
+	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
+		XMFLOAT2 pointC, D2D1_COLOR_F color, double thick = 1.0f);
+	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
+		XMFLOAT2 pointC, XMFLOAT4 color, double thick = 1.0f);
 
-	void DrawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC, D2D1_COLOR_F color, float thick = 1);
-	void DrawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB, XMFLOAT2 pointC, XMFLOAT4 color, float thick = 1);
+	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
+		D2D1_COLOR_F color, double angle, double thick = 1.0f);
+	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
+		XMFLOAT4 color, double angle, double thick = 1.0f);
 
-	void DrawArc(XMFLOAT2 center, XMFLOAT2 radius, D2D1_COLOR_F color, float angle, float thick = 1);
-	void DrawArc(XMFLOAT2 center, XMFLOAT2 radius, XMFLOAT4 color, float angle, float thick = 1);
+	void printText(LPCWSTR output, XMFLOAT2 coord, D2D1_COLOR_F color);
+	void printText(LPCWSTR output, XMFLOAT2 coord, XMFLOAT4 color);
 
-	void PrintText(LPWSTR text, int lenght, float x, float y, float r, float g, float b, float a);
-	void PrintText(LPCWSTR text, XMFLOAT2 coord, D2D1_COLOR_F color);
-	void PrintText(LPCWSTR text, XMFLOAT2 coord, XMFLOAT4 color);
+	void printNum(double output, XMFLOAT2 coord, double shift,
+		LPCWSTR font, double size, XMFLOAT4 color,
+		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
+	void printNum(double output, XMFLOAT2 coord, double shift,
+		LPCWSTR font, double size, D2D1_COLOR_F color,
+		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
 
-	void PrintNum(float num, XMFLOAT2 coord, float shift, LPCWSTR font, float size, XMFLOAT4 color, DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
-	void PrintNum(float num, XMFLOAT2 coord, float shift, LPCWSTR font, float size, D2D1_COLOR_F color, DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
+	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
+		LPCWSTR family, D2D1_COLOR_F color);
+	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
+		LPCWSTR family, XMFLOAT4 color);
 
-	void PrintTextManual(LPCWSTR text, int lenght, XMFLOAT2 coord, float size, LPCWSTR family, XMFLOAT4 color);
-	void PrintTextManual(LPCWSTR text, int lenght, XMFLOAT2 coord, float size, LPCWSTR family, D2D1_COLOR_F color);
-	void PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, D2D1_COLOR_F color);
-	void PrintTextManual(LPCWSTR text, XMFLOAT2 coord, float size, LPCWSTR family, XMFLOAT4 color);
+	void drawEntity(Item obj, XMFLOAT2 coord, XMFLOAT2 properties, int type);
 
-	void logic_DrawEntity(item entity, XMFLOAT2 coord, XMFLOAT2 properties, int type);
-
-	VOID DEBUG_ShowInfo(const char* argv);
-	VOID DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::wstring b_num);
-	VOID DEBUG_ShowMenu();
-	VOID RW_DrawInterface(const char* argv);
+	void showInfo(const char* argv);
+	void showHardware(double timerIn, wstring buildName, wstring buildNum);
+	void showMenu();
+	void drawInterface(const char* argv);
 };

@@ -1,8 +1,8 @@
 #pragma once
-#include "RWSpriteSystem.h"
+
 #include "RWLevel.h"
-#include "RWTimer.h"
-#include "RWSound.h"
+#include "RWGraphics.h"
+#include "RWController.h"
 
 class RWDemo_3DUI : public RWLevel {
 	RWTimer* hpTimer;
@@ -11,11 +11,11 @@ class RWDemo_3DUI : public RWLevel {
 	POINT cursorPos;
 public:
 	// Функция Load(): подгатавливает уровень к инициализации, загружает данные
-	void Load() override;
+	void load() override;
 	// Функция Unload(): выгрузка данных, деконструкция уровня
-	void Unload() override;
+	void unload() override;
 	// Функция Update(): обновление значений хранящихся в Load() переменных перед вызовом Render()
-	void Update(double timeTotal, double timeDelta) override;
+	void update(double timeTotal, double timeDelta) override;
 	// Функция Render(): отрисовка сцены по заданным параметрам
-	void Render() override;
+	void render() override;
 };

@@ -1,35 +1,35 @@
-#include "RWController.h"
-#include "RWGraphics.h"
+
+#include "RWHeaders.h"
 
 RWLevel* RWController::currentLevel;
 RWTimer* RWController::hpTimer;
-bool RWController::IsLoading;
+bool RWController::isLoading;
 
-void RWController::Initialize() {
-	IsLoading = true;
+void RWController::initialize() {
+	isLoading = true;
 	currentLevel = 0;
 	hpTimer = new RWTimer();
 }
-void RWController::LoadInitialLevel(RWLevel* level) {
-	IsLoading = true;
+void RWController::loadInitialLevel(RWLevel* level) {
+	isLoading = true;
 	currentLevel = level;
-	currentLevel->Load();
-	IsLoading = false;
+	currentLevel->load();
+	isLoading = false;
 }
-void RWController::SwitchLevel(RWLevel* level) {
-	IsLoading = true;
-	currentLevel->Unload();
-	level->Load();
+void RWController::switchLevel(RWLevel* level) {
+	isLoading = true;
+	currentLevel->unload();
+	level->load();
 	delete currentLevel;
 	currentLevel = level;
-	IsLoading = false;
+	isLoading = false;
 }
-void RWController::Render() {
-	if (IsLoading) return;
-	currentLevel->Render();
+void RWController::render() {
+	if (isLoading) return;
+	currentLevel->render();
 }
-void RWController::Update() {
-	if (IsLoading) return;
-	hpTimer->Update();
-	currentLevel->Update(hpTimer->GetTimeTotal(), hpTimer->GetTimeDelta());
+void RWController::update() {
+	if (isLoading) return;
+	hpTimer->update();
+	currentLevel->update(hpTimer->getTimeTotal(), hpTimer->getTimeDelta());
 }

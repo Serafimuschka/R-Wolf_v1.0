@@ -2,24 +2,22 @@
 
 // core instruments:
 #ifdef _RW_USE_GLOBAL_DEFINITIONS
-#define clscr			ClearScreen
-#define cmd				CreateConsole
-#define line			DrawLine
-#define rect			DrawRectangle
-#define ellipse			DrawCircle
-#define tri				DrawTriangle
-#define arc				DrawArc
-#define textdef			PrintText
-#define textman			PrintTextManual
-#define number			PrintNum
-#define button			CreateButton
-#define bar				ProgressBar
-#define obj				logic_DrawEntity
-#define d_info			DEBUG_ShowInfo
-#define d_menu			DEBUG_ShowMenu
-#define d_hware			DEBUG_ShowHardware
-#define d_fps			DEBUG_CountFPS
-#define rw_iface		RW_DrawInterface
+#define clscr			clearScreen
+#define cmd				createConsole
+#define line			drawLine
+#define rect			drawRectangle
+#define ellipse			drawCircle
+#define tri				drawTriangle
+#define arc				drawArc
+#define textdef			printText
+#define textman			printTextManual
+#define textnum			printNum
+#define bar				progressBar
+#define entity			drawEntity
+#define info			showInfo
+#define menu			showMenu
+#define hware			showHardware
+#define rw_iface		drawInterface
 #define SW				ScreenWidth
 #define SH				ScreenHeight
 #endif
@@ -42,14 +40,14 @@ enum Actions {
 };
 
 // entity types structs:
-struct item {
+struct Item {
 	LPCWSTR name;
 	double health;
 	double damage;
 };
 
 // entity types enumeration:
-enum item_types {
+enum ItemTypes {
 	ENTITY_RECT = 0,
 	ENTITY_BULLET = 1,
 	ENTITY_AID = 2

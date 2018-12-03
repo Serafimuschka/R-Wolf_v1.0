@@ -136,12 +136,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="RW-Demo-3D-UI.cpp" />
-    <ClCompile Include="RWMainMenu.cpp" />
     <ClCompile Include="RWGraphics.cpp" />
     <ClCompile Include="RWMain.cpp" />
     <ClCompile Include="RWController.cpp" />
     <ClCompile Include="RWLevel.cpp" />
-    <ClCompile Include="RWScript.cpp" />
     <ClCompile Include="RWSpriteSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,10 +147,10 @@
     <ClInclude Include="RW-Demo-3D-UI.h" />
     <ClInclude Include="RWController.h" />
     <ClInclude Include="RWGraphics.h" />
+    <ClInclude Include="RWHeaders.h" />
     <ClInclude Include="RWPhysicsConstants.h" />
     <ClInclude Include="RWTimer.h" />
     <ClInclude Include="RWLevel.h" />
-    <ClInclude Include="RWMainMenu.h" />
     <ClInclude Include="RWSpriteSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RWGlobalDefinitions.h" />

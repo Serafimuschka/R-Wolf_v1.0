@@ -9,8 +9,6 @@
 //	Presented by kalterseele, 2018								   //
 //-----------------------------------------------------------------//
 
-#include "RWGraphics.h"
-#include "RWController.h"
 #include "RW-Demo-3D-UI.h"
 
 #define _RW_USE_GLOBAL_DEFINITIONS
@@ -28,7 +26,7 @@ struct layerRect {
 };
 layerRect layer;
 
-void RWDemo_3DUI::Load() {
+void RWDemo_3DUI::load() {
 	// Устанавливаем позицию курсора в центр экрана:
 	SetCursorPos(SW / 2, SH / 2);
 
@@ -39,7 +37,7 @@ void RWDemo_3DUI::Load() {
 	pointD = XMFLOAT2(SW * 0.1, SH * 0.9);
 }
 
-void RWDemo_3DUI::Update(double total, double delta) {
+void RWDemo_3DUI::update(double total, double delta) {
 	// Получаем координаты курсора:
 	GetCursorPos(&cursorPos);
 	
@@ -77,41 +75,55 @@ void RWDemo_3DUI::Update(double total, double delta) {
 	layer.layerWidthBottom = (layer.Cx - layer.Dx) / layer.constLayerWidth;
 }
 
-void RWDemo_3DUI::Render() {
-	core->clscr(core->Black);
+void RWDemo_3DUI::render() {
+	core->clscr(core->black);
 
 	// Отладчик положения курсора:
-	core->line(XMFLOAT4(0, 0, cursorPos.x, cursorPos.y), core->DarkGray, 2.0f);
-	core->line(XMFLOAT4(0, SH, cursorPos.x, cursorPos.y), core->DarkGray, 2.0f);
-	core->line(XMFLOAT4(SW, 0, cursorPos.x, cursorPos.y), core->DarkGray, 2.0f);
-	core->line(XMFLOAT4(SW, SH, cursorPos.x, cursorPos.y), core->DarkGray, 2.0f);
-	core->rect(XMFLOAT4(cursorPos.x - 8, cursorPos.y - 8, cursorPos.x + 8, cursorPos.y + 8), core->Red, 1.0f, true);
+	core->line(XMFLOAT4(0, 0, cursorPos.x, cursorPos.y), core->darkGray, 2.0f);
+	core->line(XMFLOAT4(0, SH, cursorPos.x, cursorPos.y), core->darkGray, 2.0f);
+	core->line(XMFLOAT4(SW, 0, cursorPos.x, cursorPos.y), core->darkGray, 2.0f);
+	core->line(XMFLOAT4(SW, SH, cursorPos.x, cursorPos.y), core->darkGray, 2.0f);
+	core->rect(XMFLOAT4(cursorPos.x - 8, cursorPos.y - 8, cursorPos.x + 8, cursorPos.y + 8),
+		core->red, 1.0f, true);
 
 	// Рисуем сам слой:
-	core->line(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), core->YellowGreen, 3.0f);
-	core->textman(L"A", XMFLOAT2(pointA.x, pointA.y), 20, core->RW_Consolas, core->YellowGreen);
-	core->line(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), core->YellowGreen, 3.0f);
-	core->textman(L"B", XMFLOAT2(pointB.x, pointB.y), 20, core->RW_Consolas, core->YellowGreen);
-	core->line(XMFLOAT4(pointC.x, pointC.y, pointD.x, pointD.y), core->YellowGreen, 3.0f);
-	core->textman(L"C", XMFLOAT2(pointC.x, pointC.y), 20, core->RW_Consolas, core->YellowGreen);
-	core->line(XMFLOAT4(pointD.x, pointD.y, pointA.x, pointA.y), core->YellowGreen, 3.0f);
-	core->textman(L"D", XMFLOAT2(pointD.x, pointD.y), 20, core->RW_Consolas, core->YellowGreen);
+	core->line(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), core->yellowGreen, 3.0f);
+	core->textman(L"A", XMFLOAT2(pointA.x, pointA.y), 20.0f,
+		core->RW_Consolas, core->yellowGreen);
+	core->line(XMFLOAT4(pointB.x, pointB.y, pointC.x, pointC.y), core->yellowGreen, 3.0f);
+	core->textman(L"B", XMFLOAT2(pointB.x, pointB.y), 20.0f,
+		core->RW_Consolas, core->yellowGreen);
+	core->line(XMFLOAT4(pointC.x, pointC.y, pointD.x, pointD.y), core->yellowGreen, 3.0f);
+	core->textman(L"C", XMFLOAT2(pointC.x, pointC.y), 20.0f,
+		core->RW_Consolas, core->yellowGreen);
+	core->line(XMFLOAT4(pointD.x, pointD.y, pointA.x, pointA.y), core->yellowGreen, 3.0f);
+	core->textman(L"D", XMFLOAT2(pointD.x, pointD.y), 20.0f,
+		core->RW_Consolas, core->yellowGreen);
 
 	// Объект внутри слоя
-	core->line(XMFLOAT4(layer.Ax + 25, layer.Ay + 25, layer.Ax + 100 + 100 * layer.layerWidthTop, layer.Ay + 25 + 25 * layer.layerHeightRight), core->OrangeRed, 3.0f);
+	core->line(XMFLOAT4(layer.Ax + 25, layer.Ay + 25, layer.Ax + 100 + 100 * layer.layerWidthTop,
+		layer.Ay + 25 + 25 * layer.layerHeightRight), core->orangeRed, 3.0f);
 
 	// Информация для отладки:
-	core->number(cursorPos.x, XMFLOAT2(15, 15), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(cursorPos.y, XMFLOAT2(15, 45), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(100 * layer.layerWidthTop, XMFLOAT2(15, 75), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(100 * layer.layerWidthBottom, XMFLOAT2(15, 105), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(100 * layer.layerHeightLeft, XMFLOAT2(65, 75), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(100 * layer.layerHeightRight, XMFLOAT2(65, 105), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
-	core->number(abs(100 * n), XMFLOAT2(15, 135), 0.0f, core->RW_Consolas, 15, core->YellowGreen);
+	core->textnum(cursorPos.x, XMFLOAT2(15, 15), 0.0f, core->RW_Consolas, 15.0f,
+		core->yellowGreen);
+	core->textnum(cursorPos.y, XMFLOAT2(15, 45), 0.0f, core->RW_Consolas, 15.0f,
+		core->yellowGreen);
+	core->textnum(100 * layer.layerWidthTop, XMFLOAT2(15, 75), 0.0f,
+		core->RW_Consolas, 15.0f, core->yellowGreen);
+	core->textnum(100 * layer.layerWidthBottom, XMFLOAT2(15, 105), 0.0f,
+		core->RW_Consolas, 15.0f, core->yellowGreen);
+	core->textnum(100 * layer.layerHeightLeft, XMFLOAT2(105, 75), 0.0f,
+		core->RW_Consolas, 15.0f, core->yellowGreen);
+	core->textnum(100 * layer.layerHeightRight, XMFLOAT2(105, 105), 0.0f,
+		core->RW_Consolas, 15.0f, core->yellowGreen);
+	core->textnum(abs(100 * n), XMFLOAT2(15, 135), 0.0f,
+		core->RW_Consolas, 15.0f, core->yellowGreen);
 
-	core->textman(L"R-Wolf Engine: Scalable forms demonstration [1.01]", XMFLOAT2(60, 15), 15, core->RW_Consolas, core->YellowGreen);
+	core->textman(L"R-Wolf Engine: Scalable forms demonstration [1.01]", XMFLOAT2(60, 15), 15.0f,
+		core->RW_Consolas, core->yellowGreen);
 }
 
-void RWDemo_3DUI::Unload() {
+void RWDemo_3DUI::unload() {
 
 }

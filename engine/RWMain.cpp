@@ -4,7 +4,7 @@
 #include "RWGlobalDefinitions.h"
 #include "RWGraphics.h"
 #include "RWLevel.h"
-#include "RWMainMenu.h"
+#include "RW-Demo-3D-UI.h"
 #include "RWController.h"
 
 RWGraphics* graphics;
@@ -54,7 +54,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 
 	RWLevel::Initialize(graphics);
 	RWController::Initialize();
-	RWController::LoadInitialLevel(new RWMainMenu());
+	RWController::LoadInitialLevel(new RWDemo_3DUI());
 	
 	MSG msg;
 	msg.message = WM_NULL;

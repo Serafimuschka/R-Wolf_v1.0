@@ -361,12 +361,8 @@ VOID RWGraphics::DEBUG_ShowInfo(const char* argv) {
 
 	PrintTextManual(L"Используемая/пиковая ОЗУ и FPS:", XMFLOAT2(45, 15), 16, RW_Consolas, DeepSkyBlue);
 
-	if (argv == "begin") oldTime = GetTickCount();
-	if (argv == "end") newTime = GetTickCount();
-	delta = newTime - oldTime;
-	fps = 1000 / delta;
 	ProgressBar(XMFLOAT2(35, 65), XMFLOAT2(200, 20), memp, mem, DeepSkyBlue);
-	ProgressBar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, fps, DeepSkyBlue);
+	ProgressBar(XMFLOAT2(285, 65), XMFLOAT2(200, 20), 90, 60, DeepSkyBlue);
 }
 
 VOID RWGraphics::DEBUG_ShowHardware(double timerIn, std::wstring b_name, std::wstring b_num) {

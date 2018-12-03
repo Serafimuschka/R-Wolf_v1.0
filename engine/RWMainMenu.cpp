@@ -23,7 +23,7 @@ void RWMainMenu::Load() {
 	buildname = L"Maverick [Pre-Alpha edition]";
 	buildnum = L"0034";
 	con_in = '\0';
-	speed = pow(G, 0.5);
+	speed = 4;
 	//sound->initialize();
 }
 
@@ -72,9 +72,9 @@ void RWMainMenu::Update(double timeTotal, double timeDelta) {
 }
 
 void RWMainMenu::Render() {
-	core->d_info("count_begin");
+	core->d_info("begin");
 	core->clscr(XMFLOAT3(15, 15, 15));
-	core->rw_iface("open");
+	//core->rw_iface("open");
 	tex->Texturize(startpos, mapsize, 25);
 	picture->Draw(anim, objectpos, 255);
 	if (action == 1) {
@@ -84,10 +84,10 @@ void RWMainMenu::Render() {
 	}
 		// Исполнение кода уровня
 	ScriptInit("MainMenuScript.xml");
-	core->rw_iface("close");
+	//core->rw_iface("close");
 	core->d_hware(ttime, buildname, buildnum);
 	core->d_menu();
-	core->d_info("count_end");
+	core->d_info("end");
 }
 
 void RWMainMenu::Unload() {

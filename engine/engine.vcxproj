@@ -99,7 +99,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;windowscodecs.lib;dwrite.lib;d2d1.lib;legacy_stdio_definitions.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;legacy_stdio_definitions.lib;windowscodecs.lib;dwrite.lib;d2d1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RW-Demo-3D-UI.cpp" />
     <ClCompile Include="RWMainMenu.cpp" />
     <ClCompile Include="RWGraphics.cpp" />
     <ClCompile Include="RWMain.cpp" />
@@ -145,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGIType.h" />
+    <ClInclude Include="RW-Demo-3D-UI.h" />
     <ClInclude Include="RWController.h" />
     <ClInclude Include="RWGraphics.h" />
     <ClInclude Include="RWPhysicsConstants.h" />

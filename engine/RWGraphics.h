@@ -39,6 +39,19 @@ class RWGraphics {
 	ID2D1SolidColorBrush*		brush;
 	ID2D1PathGeometry*			path;
 public:
+	struct ScalableMatrix5x4F {
+		double _11, _12, _13, _14;
+		double _21, _22, _23, _24;
+		double _31, _32, _33, _34;
+		double _41, _42, _43, _44;
+		double _51, _52, _53, _54;
+	};
+	struct ScalableObjectProperties {
+		double _11, _12, _13, _14;
+		double _21, _22, _23, _24;
+		D2D1_FIGURE_BEGIN figureBegin;
+		D2D1_FIGURE_END figureEnd;
+	};
 	D2D1_COLOR_F	white = ColorF(ColorF::White);
 	D2D1_COLOR_F	snow = ColorF(ColorF::Snow);
 	D2D1_COLOR_F	honeydew = ColorF(ColorF::Honeydew);
@@ -238,47 +251,39 @@ public:
 		double thick, bool fill = false);
 	void drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color,
 		double thick, bool fill = false);
-
 	void drawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color,
 		double thick, bool fill = false);
 	void drawRectangle(XMFLOAT4 coord, XMFLOAT4 color,
 		double thick, bool fill = false);
-
 	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
 		double maxval, double curval, D2D1_COLOR_F color);
 	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
 		double maxval, double curval, XMFLOAT4 color);
-
 	void drawLine(XMFLOAT4 coord, D2D1_COLOR_F color, double thick = 1.0f);
 	void drawLine(XMFLOAT4 coord, XMFLOAT4 color, double thick = 1.0f);
-
 	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
 		XMFLOAT2 pointC, D2D1_COLOR_F color, double thick = 1.0f);
 	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
 		XMFLOAT2 pointC, XMFLOAT4 color, double thick = 1.0f);
-
 	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
 		D2D1_COLOR_F color, double angle, double thick = 1.0f);
 	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
 		XMFLOAT4 color, double angle, double thick = 1.0f);
-
 	void printText(LPCWSTR output, XMFLOAT2 coord, D2D1_COLOR_F color);
 	void printText(LPCWSTR output, XMFLOAT2 coord, XMFLOAT4 color);
-
 	void printNum(double output, XMFLOAT2 coord, double shift,
 		LPCWSTR font, double size, XMFLOAT4 color,
 		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
 	void printNum(double output, XMFLOAT2 coord, double shift,
 		LPCWSTR font, double size, D2D1_COLOR_F color,
 		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
-
 	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
 		LPCWSTR family, D2D1_COLOR_F color);
 	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
 		LPCWSTR family, XMFLOAT4 color);
-
 	void drawEntity(Item obj, XMFLOAT2 coord, XMFLOAT2 properties, int type);
-
+	void drawScalableObject(ScalableObjectProperties config, XMFLOAT2 offsetA,
+		XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT4 offsetD, RWGraphics func);
 	void showInfo(const char* argv);
 	void showHardware(double timerIn, wstring buildName, wstring buildNum);
 	void showMenu();

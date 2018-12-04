@@ -458,3 +458,16 @@ void RWGraphics::drawInterface(const char* argv) {
 			GetSystemMetrics(SM_CYSCREEN) - 15), deepSkyBlue, 2.0f);
 	}
 }
+
+void RWGraphics::drawScalableObject(ScalableObjectProperties config, XMFLOAT2 offsetA,
+	XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT4 offsetD, RWGraphics func) {
+	ID2D1GeometrySink* sink;
+	factory->CreatePathGeometry(&path);
+	path->Open(&sink);
+
+	sink->BeginFigure();
+	sink->EndFigure();
+
+	sink->Close();
+	sink->Release();
+}

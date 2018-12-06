@@ -39,6 +39,9 @@
     <ClCompile Include="RW-Demo-3D-UI.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Demo-Map.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXGIType.h">
@@ -77,6 +80,9 @@
     <ClInclude Include="RWHeaders.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Demo-Map.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\img\icon.ico">
@@ -93,6 +99,9 @@
     </Image>
     <Image Include="glass_01.png">
       <Filter>Файлы ресурсов\textures\materials</Filter>
+    </Image>
+    <Image Include="map.png">
+      <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

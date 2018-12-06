@@ -460,14 +460,25 @@ void RWGraphics::drawInterface(const char* argv) {
 }
 
 void RWGraphics::drawScalableObject(ScalableObjectProperties config, XMFLOAT2 offsetA,
-	XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT4 offsetD, RWGraphics func) {
+	XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT2 offsetD, D2D1_COLOR_F color) {
 	ID2D1GeometrySink* sink;
 	factory->CreatePathGeometry(&path);
 	path->Open(&sink);
 
-	sink->BeginFigure();
-	sink->EndFigure();
+	RT->CreateSolidColorBrush(color, &brush);
+
+	sink->BeginFigure(Point2F(config._11 + offsetA.x, config._12 + offsetA.y),
+		config.figureBegin);
+
+	sink->AddLine(Point2F(config._13 - offsetB.x, config._14 + offsetB.y));
+	sink->AddLine(Point2F(config._23 - offsetC.x, config._24 - offsetC.y));
+	sink->AddLine(Point2F(config._21 + offsetD.x, config._22 - offsetD.y));
+
+	sink->EndFigure(config.figureEnd);
+
+	RT->DrawGeometry(path, brush, 2.0f);
 
 	sink->Close();
 	sink->Release();
+	brush->Release();
 }

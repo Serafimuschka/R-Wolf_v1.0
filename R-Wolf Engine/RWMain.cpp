@@ -8,6 +8,7 @@
 
 #include "RWHeaders.h"
 #include "RW-Demo-3D-UI.h"
+#include "Demo-Map.h"
 
 RWGraphics* gfx;
 
@@ -18,6 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 	ZeroMemory(&wcex, sizeof(WNDCLASSEX));
 	wcex.cbSize	=				sizeof(WNDCLASSEX);
 	wcex.hIcon =				LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.hCursor =				LoadCursor(hInst, IDC_HAND);
 	wcex.hbrBackground =		(HBRUSH)COLOR_WINDOW;
 	wcex.hInstance =			hInst;
 	wcex.lpfnWndProc =			windowProc;
@@ -64,7 +66,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 
 	RWLevel::initialize(gfx);
 	RWController::initialize();
-	RWController::loadInitialLevel(new RWDemo_3DUI());
+	RWController::loadInitialLevel(new Map());
 	
 	MSG msg;
 	msg.message = WM_NULL;

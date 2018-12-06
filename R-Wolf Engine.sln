@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "R-Wolf Engine", "engine\engine.vcxproj", "{255D8055-EA15-4500-82F5-B6CA995E24AF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "R-Wolf Engine", "R-Wolf Engine\engine.vcxproj", "{255D8055-EA15-4500-82F5-B6CA995E24AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R-Wolf Launcher", "MurenaLauncher\R-Wolf Launcher.csproj", "{D493CBB7-F3A9-4C49-88AB-2016D9A456F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R-Wolf Launcher", "R-Wolf Launcher\R-Wolf Launcher.csproj", "{D493CBB7-F3A9-4C49-88AB-2016D9A456F6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{255D8055-EA15-4500-82F5-B6CA995E24AF} = {255D8055-EA15-4500-82F5-B6CA995E24AF}
 	EndProjectSection

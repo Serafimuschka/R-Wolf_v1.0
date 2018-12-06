@@ -283,7 +283,7 @@ public:
 		LPCWSTR family, XMFLOAT4 color);
 	void drawEntity(Item obj, XMFLOAT2 coord, XMFLOAT2 properties, int type);
 	void drawScalableObject(ScalableObjectProperties config, XMFLOAT2 offsetA,
-		XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT4 offsetD, RWGraphics func);
+		XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT2 offsetD, D2D1_COLOR_F color);
 	void showInfo(const char* argv);
 	void showHardware(double timerIn, wstring buildName, wstring buildNum);
 	void showMenu();

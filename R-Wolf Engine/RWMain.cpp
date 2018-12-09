@@ -66,7 +66,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 
 	RWLevel::initialize(gfx);
 	RWController::initialize();
-	RWController::loadInitialLevel(new Map());
+	RWController::loadInitialLevel(new RWDemo_3DUI());
 	
 	MSG msg;
 	msg.message = WM_NULL;

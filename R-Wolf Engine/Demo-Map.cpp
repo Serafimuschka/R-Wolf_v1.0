@@ -352,15 +352,6 @@ void Map::render() {
 	core->rect(XMFLOAT4(0, IH, SW, SH), core->lightSlateGray, 1.0f, true);
 	core->rect(XMFLOAT4(0, 0, IW0, SH), core->lightSlateGray, 1.0f, true);
 	core->rect(XMFLOAT4(IW, 0, SW, SH), core->lightSlateGray, 1.0f, true);
-	core->textman(L"Экспериментируйте!", XMFLOAT2(25, 25), 30.0f, core->RW_Consolas, core->white);
-	core->textman(L"Графический визуализатор и движок R-Wolf 2D позволяет\nделать это с удовольствием",
-		XMFLOAT2(25, 75), 15.0f, core->RW_Consolas, core->white);
-	core->textman(L"Пробуйте, нажимайте, перемещайте...\nФункциональный макет демонстирирует приложения для\nдругих платформ, при должном желании можно даже собрать\nготовое решение внутри визуализатора.",
-		XMFLOAT2(25, 125), 15.0f, core->RW_Consolas, core->white);
-	core->textman(L"Клавишные команды макета:\nESC - завершить работу макета\nCTRL[удерж.] - поставить маркер А\nSHIFT[удерж.] - поставить маркер В\nTAB - сбросить маркеры\nЛКМ[удерж.] - скролл карты",
-		XMFLOAT2(25, 250), 15.0f, core->RW_Consolas, core->white);
-	core->textman(L"Created by kalterseele (c) 2018\nVK: vk.com/kalterseele\nInstagram: @kalterseele\nTelegram: @kalterseele\nRequest an engine's demos: einhorn.sv@gmail.com\nGitHub repository:\nhttps://github.com/Serafimuschka/R-Wolf_v1.0",
-		XMFLOAT2(25, SH - 125), 12.0f, core->RW_Consolas, core->white);
 }
 
 void Map::unload() {

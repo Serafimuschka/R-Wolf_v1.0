@@ -43,7 +43,7 @@ void RWDemo_3DUI::update(double total, double delta) {
 	bool lButton = false;
 	if (GetAsyncKeyState(VK_LBUTTON)) lButton = true;
 
-	if (lButton) {
+	if (!lButton) {
 		GetCursorPos(&cursorPos);
 	}
 
@@ -80,6 +80,19 @@ void RWDemo_3DUI::render() {
 	core->rect(XMFLOAT4(cursorPos.x - 4, cursorPos.y - 4, cursorPos.x + 4, cursorPos.y + 4),
 		core->red, 1.0f, true);
 
+	// Выделение из слоя прямоугольника:
+	core->line(XMFLOAT4(0, pointA.y, SW, pointA.y), core->gray, 2.0f);
+	core->line(XMFLOAT4(pointA.x, 0, pointA.x, SH), core->gray, 2.0f);
+
+	core->line(XMFLOAT4(0, pointB.y, SW, pointB.y), core->gray, 2.0f);
+	core->line(XMFLOAT4(pointB.x, 0, pointB.x, SH), core->gray, 2.0f);
+
+	core->line(XMFLOAT4(0, pointC.y, SW, pointC.y), core->gray, 2.0f);
+	core->line(XMFLOAT4(pointC.x, 0, pointC.x, SH), core->gray, 2.0f);
+
+	core->line(XMFLOAT4(0, pointD.y, SW, pointD.y), core->gray, 2.0f);
+	core->line(XMFLOAT4(pointD.x, 0, pointD.x, SH), core->gray, 2.0f);
+
 	// Рисуем сам слой:
 	core->line(XMFLOAT4(pointA.x, pointA.y, pointB.x, pointB.y), core->yellowGreen, 3.0f);
 	core->textman(L"A", XMFLOAT2(pointA.x, pointA.y), 20.0f,
@@ -95,12 +108,6 @@ void RWDemo_3DUI::render() {
 		core->RW_Consolas, core->yellowGreen);
 
 	// Объект над слоем:
-	/*core->drawScalableObject(config, XMFLOAT2(50.0f, 50.0f), XMFLOAT2(50.0f, 50.0f),
-		XMFLOAT2(50.0f, 50.0f), XMFLOAT2(50.0f, 50.0f), core->red);*/
-	core->line(XMFLOAT4(config._11 + 50, config._12 + 50, config._23 - 50, config._24 - 50),
-		core->red, 2.0f);
-	core->line(XMFLOAT4(config._13 - 50, config._14 + 50, config._21 + 50, config._22 - 50),
-		core->red, 2.0f);
 
 	// Информация для отладки:
 	core->textnum(cursorPos.x, XMFLOAT2(15, 15), 0.0f, core->RW_Consolas, 15.0f,

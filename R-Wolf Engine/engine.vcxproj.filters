@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Файлы ресурсов\textures">
-      <UniqueIdentifier>{fed118b3-b1b4-4b36-a975-990208fad508}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы ресурсов\textures\materials">
-      <UniqueIdentifier>{174e1a52-a64c-4635-a1ea-6d1cedce6701}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RWGraphics.cpp">
@@ -27,19 +21,22 @@
     <ClCompile Include="RWMain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="RWLevel.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="RWController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="RWSpriteSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="RW-Demo-3D-UI.cpp">
+    <ClCompile Include="RWLoading.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Demo-Map.cpp">
+    <ClCompile Include="RWLevel.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchenweltMenu.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchenweltGame.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,13 +71,16 @@
     <ClInclude Include="RWPhysicsConstants.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="RW-Demo-3D-UI.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="RWHeaders.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Demo-Map.h">
+    <ClInclude Include="RWLoading.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchenweltMenu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchenweltGame.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,19 +88,25 @@
     <Image Include="resources\img\icon.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="test.png">
+    <Image Include="resources\img\avatar.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="hero.png">
+    <Image Include="resources\img\engine_logo.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="texture.png">
+    <Image Include="resources\img\elite.PNG">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="glass_01.png">
-      <Filter>Файлы ресурсов\textures\materials</Filter>
+    <Image Include="resources\img\mat_icon.png">
+      <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="map.png">
+    <Image Include="resources\img\money_icon.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\img\tec_norm.PNG">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resources\img\tec_sil.PNG">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
@@ -108,10 +114,5 @@
     <ResourceCompile Include="Resource.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="MainMenuScript.xml">
-      <Filter>Файлы ресурсов</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

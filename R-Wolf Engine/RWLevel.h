@@ -5,25 +5,17 @@
 
 class RWLevel {
 protected:
-	HRESULT					hres;
-	FLOAT					dtime, ttime;
-	WCHAR*					con_in;
-
 	static RWGraphics*				core;
+	// ÂÍÈÌÀÍÈÅ: ÓÑÒÀÐÅÂØÈÅ ÊËÀÑÑÛ
+	// Áóäóò âñêîðå óäàëåíû èç óðîâíÿ è èñïîëüçîâàòüñÿ íà íàòèâíîì óðîâíå
+	// -->
 	static RWSpriteSystem*			picture;
 	static RWSpriteSystem*			tex;
-	static RWSpriteAlternative*		sprite;
+	// <--
+	static RWSpriteSystemA*			sprite;
 public:
-	XMFLOAT2				mapsize;
-	XMFLOAT2				startpos;
-	XMFLOAT2				objectpos;
-	UINT					encounter;
-	DOUBLE					speed;
-	INT						anim, action;
-	UINT					ScreenWidth = GetSystemMetrics(SM_CXSCREEN), 
-							ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
-	wstring					AdapterName, buildnum, buildname;
-	wstring					CurrentLevelName;
+	UINT							ScreenWidth = GetSystemMetrics(SM_CXSCREEN), 
+									ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	static void initialize(RWGraphics* graphics) {
 		core = graphics;

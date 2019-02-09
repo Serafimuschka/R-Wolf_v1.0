@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R-Wolf Launcher", "R-Wolf L
 		{255D8055-EA15-4500-82F5-B6CA995E24AF} = {255D8055-EA15-4500-82F5-B6CA995E24AF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R-Wolf Editor", "R-Wolf Editor\R-Wolf Editor.csproj", "{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,18 +43,6 @@ Global
 		{D493CBB7-F3A9-4C49-88AB-2016D9A456F6}.Release|x64.Build.0 = Release|Any CPU
 		{D493CBB7-F3A9-4C49-88AB-2016D9A456F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{D493CBB7-F3A9-4C49-88AB-2016D9A456F6}.Release|x86.Build.0 = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|x64.Build.0 = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Debug|x86.Build.0 = Debug|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|x64.ActiveCfg = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|x64.Build.0 = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|x86.ActiveCfg = Release|Any CPU
-		{FDCE913B-C25B-4422-B1ED-DEE71F7D8DAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

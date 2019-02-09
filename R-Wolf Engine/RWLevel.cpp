@@ -5,5 +5,4 @@
 RWGraphics*				RWLevel::core;
 RWSpriteSystem*			RWLevel::picture;
 RWSpriteSystem*			RWLevel::tex;
-RWSpriteAlternative*	RWLevel::sprite;
-//RWSound*				RWLevel::sound;
+RWSpriteSystemA*		RWLevel::sprite;

@@ -17,11 +17,11 @@ public:
 	void texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity);
 };
 
-class RWSpriteAlternative {
-	RWSpriteSystem*		syst;
+class RWSpriteSystemA {
+	static RWSpriteSystem*		rwss;
 public:
 	void draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity);
-	void draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index,
+	void draw(LPCWSTR filename, RWGraphics* gfx, unsigned int index,
 		XMFLOAT2 size, XMFLOAT2 coord, double opacity);
 	void texturize(LPCWSTR filename, RWGraphics* gfx, XMFLOAT4 rectangle, double opacity);
 };

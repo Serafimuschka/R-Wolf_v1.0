@@ -7,8 +7,7 @@
 //
 
 #include "RWHeaders.h"
-#include "RW-Demo-3D-UI.h"
-#include "Demo-Map.h"
+#include "RWLoading.h"
 
 RWGraphics* gfx;
 
@@ -66,7 +65,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 
 	RWLevel::initialize(gfx);
 	RWController::initialize();
-	RWController::loadInitialLevel(new RWDemo_3DUI());
+	RWController::loadInitialLevel(new RWLoading());
 	
 	MSG msg;
 	msg.message = WM_NULL;

@@ -22,6 +22,12 @@ RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx) {
 		GENERIC_READ,
 		WICDecodeMetadataCacheOnLoad,
 		&wicDecoder);
+	if (FAILED(hr)) {
+		wstring str = L"Error handled: can't load image ";
+		str += filename;
+		MessageBoxW(NULL, str.c_str(), L"R-Wolf 1.2 Fatal error message", MB_ICONERROR | MB_OK);
+		exit(-1);
+	}
 
 	// Чтение изображения:
 	IWICBitmapFrameDecode* wicFrame = NULL;
@@ -45,7 +51,6 @@ RWSpriteSystem::RWSpriteSystem(LPCWSTR filename, RWGraphics* gfx) {
 		wicConverter,
 		NULL,
 		&bmp);
-
 	// Убираем объекты WIC:
 	if (wicFactory) wicFactory->Release();
 	if (wicDecoder) wicDecoder->Release();
@@ -110,19 +115,25 @@ void RWSpriteSystem::texturize(XMFLOAT2 coord, XMFLOAT2 mapsize, double opacity)
 	}
 }
 
-void RWSpriteAlternative::draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity) {
-	syst->draw(0, coord, opacity);
+RWSpriteSystem* RWSpriteSystemA::rwss;
+
+void RWSpriteSystemA::draw(LPCWSTR filename, RWGraphics* gfx, XMFLOAT2 coord, double opacity) {
+	rwss = new RWSpriteSystem(filename, gfx);
+	rwss->draw(0, coord, opacity);
+	delete rwss;
 }
 
-void RWSpriteAlternative::draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index,
+void RWSpriteSystemA::draw(LPCWSTR filename, RWGraphics* gfx, uint32_t index,
 	XMFLOAT2 size, XMFLOAT2 coord, double opacity) {
-	syst->draw(index, coord, opacity);
+	rwss = new RWSpriteSystem(filename, gfx, size.x, size.y);
+	rwss->draw(index, coord, opacity);
+	delete rwss;
 }
 
-void RWSpriteAlternative::texturize(LPCWSTR filename, RWGraphics* gfx,
+void RWSpriteSystemA::texturize(LPCWSTR filename, RWGraphics* gfx,
 	XMFLOAT4 rectangle, double opacity) {
-	syst = new RWSpriteSystem(filename, gfx);
-	syst->texturize(XMFLOAT2(rectangle.x, rectangle.y),
+	rwss = new RWSpriteSystem(filename, gfx);
+	rwss->texturize(XMFLOAT2(rectangle.x, rectangle.y),
 		XMFLOAT2(rectangle.z, rectangle.w), opacity);
-	delete syst;
+	delete rwss;
 }

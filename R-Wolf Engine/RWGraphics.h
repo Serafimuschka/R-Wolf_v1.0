@@ -1,5 +1,5 @@
-//
-//
+//	Прототип графической оболочки движка R-Wolf
+//	Версия 1.2
 //
 //
 //
@@ -16,8 +16,10 @@
 #include <DWrite.h>
 #include <xnamath.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #define _RW_USE_PHYSICS_CONSTANTS
 #include "RWPhysicsConstants.h"
@@ -28,7 +30,6 @@
 using namespace D2D1;
 using namespace std;
 
-#define rwfont					wstring
 #define RT						renderTarget
 
 class RWGraphics {
@@ -39,19 +40,9 @@ class RWGraphics {
 	ID2D1SolidColorBrush*		brush;
 	ID2D1PathGeometry*			path;
 public:
-	struct ScalableMatrix5x4F {
-		double _11, _12, _13, _14;
-		double _21, _22, _23, _24;
-		double _31, _32, _33, _34;
-		double _41, _42, _43, _44;
-		double _51, _52, _53, _54;
-	};
-	struct ScalableObjectProperties {
-		double _11, _12, _13, _14;
-		double _21, _22, _23, _24;
-		D2D1_FIGURE_BEGIN figureBegin;
-		D2D1_FIGURE_END figureEnd;
-	};
+	unsigned int	endWidth = GetSystemMetrics(SM_CXSCREEN);
+	unsigned int	endHeight = GetSystemMetrics(SM_CYSCREEN);
+
 	D2D1_COLOR_F	white = ColorF(ColorF::White);
 	D2D1_COLOR_F	snow = ColorF(ColorF::Snow);
 	D2D1_COLOR_F	honeydew = ColorF(ColorF::Honeydew);
@@ -190,39 +181,9 @@ public:
 	D2D1_COLOR_F	navy = ColorF(ColorF::Navy);
 	D2D1_COLOR_F	midnightBlue = ColorF(ColorF::MidnightBlue);
 
-	rwfont			agency = L"Agency FB";
-	rwfont			agencyCyrillic = L"Agency FB Cyrillic";
-	rwfont			alien = L"Alien Encounters(RUS BY LYAJKA)";
-	rwfont			arial = L"Arial";
-	rwfont			b52 = L"B52";
-	rwfont			consolas = L"Consolas";
-	rwfont			digital7 = L"Digital-7 Mono";
-	rwfont			fixedsys = L"Fixedsys";
-	rwfont			gost = L"GOST type A";
-	rwfont			holoLens = L"HoloLens MDL2 Assets";
-	rwfont			roboto = L"Roboto Thin";
-	rwfont			larabiefont = L"Larabiefont Free";
-	rwfont			segoe = L"Segoe MDL2 Assets";
-	rwfont			system = L"System";
-	rwfont			symbol = L"Symbol type A";
-	rwfont			terminal = L"Terminal";
-
-	LPCWSTR			RW_Agency = agency.c_str();
-	LPCWSTR			RW_AgencyCyrillic = agencyCyrillic.c_str();
-	LPCWSTR			RW_Alien = alien.c_str();
-	LPCWSTR			RW_Arial = arial.c_str();
-	LPCWSTR			RW_B52 = b52.c_str();
-	LPCWSTR			RW_Consolas = consolas.c_str();
-	LPCWSTR			RW_Digital7 = digital7.c_str();
-	LPCWSTR			RW_Fixedsys = fixedsys.c_str();
-	LPCWSTR			RW_GOST = gost.c_str();
-	LPCWSTR			RW_HoloLens = holoLens.c_str();
-	LPCWSTR			RW_Roboto = roboto.c_str();
-	LPCWSTR			RW_Larabiefont = larabiefont.c_str();
-	LPCWSTR			RW_Segoe = segoe.c_str();
-	LPCWSTR			RW_System = system.c_str();
-	LPCWSTR			RW_Symbol = symbol.c_str();
-	LPCWSTR			RW_Terminal = terminal.c_str();
+	// Предопределённые шрифты должны быть упразднены
+	wstring			rwDefault = L"System";
+	LPCWSTR			RW_Default = rwDefault.c_str();
 
 	RWGraphics();
 	~RWGraphics();
@@ -247,45 +208,61 @@ public:
 		RT->Resize(SizeU(width, height));
 	}
 
+	void drawLine(XMFLOAT4 points, double thick, D2D1_COLOR_F clr, ID2D1StrokeStyle* style);
+	void drawLine(XMFLOAT4 points, double thick, XMFLOAT4 clr, ID2D1StrokeStyle* style);
+
 	void drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, XMFLOAT4 color,
 		double thick, bool fill = false);
 	void drawCircle(XMFLOAT2 coord, XMFLOAT2 radius, D2D1_COLOR_F color,
 		double thick, bool fill = false);
+
 	void drawRectangle(XMFLOAT4 coord, D2D1_COLOR_F color,
 		double thick, bool fill = false);
 	void drawRectangle(XMFLOAT4 coord, XMFLOAT4 color,
 		double thick, bool fill = false);
+
 	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
 		double maxval, double curval, D2D1_COLOR_F color);
 	void progressBar(XMFLOAT2 coord, XMFLOAT2 size,
 		double maxval, double curval, XMFLOAT4 color);
+
+	void loadBar(UINT sw, UINT sh, int timeoutMax, int timeoutCurr);
+
 	void drawLine(XMFLOAT4 coord, D2D1_COLOR_F color, double thick = 1.0f);
 	void drawLine(XMFLOAT4 coord, XMFLOAT4 color, double thick = 1.0f);
+
 	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
-		XMFLOAT2 pointC, D2D1_COLOR_F color, double thick = 1.0f);
+		XMFLOAT2 pointC, D2D1_COLOR_F color, double thick = 1.0f, bool fill = true);
 	void drawTriangle(XMFLOAT2 pointA, XMFLOAT2 pointB,
-		XMFLOAT2 pointC, XMFLOAT4 color, double thick = 1.0f);
+		XMFLOAT2 pointC, XMFLOAT4 color, double thick = 1.0f, bool fill = true);
+
 	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
 		D2D1_COLOR_F color, double angle, double thick = 1.0f);
 	void drawArc(XMFLOAT2 center, XMFLOAT2 radius,
 		XMFLOAT4 color, double angle, double thick = 1.0f);
-	void printText(LPCWSTR output, XMFLOAT2 coord, D2D1_COLOR_F color);
-	void printText(LPCWSTR output, XMFLOAT2 coord, XMFLOAT4 color);
-	void printNum(double output, XMFLOAT2 coord, double shift,
-		LPCWSTR font, double size, XMFLOAT4 color,
-		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
-	void printNum(double output, XMFLOAT2 coord, double shift,
-		LPCWSTR font, double size, D2D1_COLOR_F color,
-		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
-	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
-		LPCWSTR family, D2D1_COLOR_F color);
-	void printTextManual(LPCWSTR output, XMFLOAT2 coord, double size,
-		LPCWSTR family, XMFLOAT4 color);
-	void drawEntity(Item obj, XMFLOAT2 coord, XMFLOAT2 properties, int type);
-	void drawScalableObject(ScalableObjectProperties config, XMFLOAT2 offsetA,
-		XMFLOAT2 offsetB, XMFLOAT2 offsetC, XMFLOAT2 offsetD, D2D1_COLOR_F color);
+
+// Updated function: printText
+// Позволяет выводить текст любого типа с различными параметрами
+	void printText(LPCWSTR output, XMFLOAT2 coord, D2D1_COLOR_F color, double size,
+		LPCWSTR font,
+		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING,
+		DWRITE_FONT_WEIGHT fw = DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE fs = DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH fst = DWRITE_FONT_STRETCH_NORMAL);
+	void printText(LPCWSTR output, XMFLOAT2 coord, XMFLOAT4 color, double size,
+		LPCWSTR font,
+		DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING,
+		DWRITE_FONT_WEIGHT fw = DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE fs = DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH fst = DWRITE_FONT_STRETCH_NORMAL); 
 	void showInfo(const char* argv);
 	void showHardware(double timerIn, wstring buildName, wstring buildNum);
 	void showMenu();
-	void drawInterface(const char* argv);
 };
+
+///<summary>
+///Проверяет, существует ли точка в заданном пространстве.
+///XMFLOAT2: Координаты проверяемой точки;
+///XMFLOAT4: Координаты начала и конца проверяемой зоны.
+///</summary>
+bool exist(XMFLOAT2, XMFLOAT4);

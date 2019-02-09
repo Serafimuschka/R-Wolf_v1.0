@@ -135,21 +135,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Demo-Map.cpp" />
-    <ClCompile Include="RW-Demo-3D-UI.cpp" />
+    <ClCompile Include="MarchenweltGame.cpp" />
+    <ClCompile Include="MarchenweltMenu.cpp" />
     <ClCompile Include="RWGraphics.cpp" />
+    <ClCompile Include="RWLevel.cpp" />
+    <ClCompile Include="RWLoading.cpp" />
     <ClCompile Include="RWMain.cpp" />
     <ClCompile Include="RWController.cpp" />
-    <ClCompile Include="RWLevel.cpp" />
     <ClCompile Include="RWSpriteSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Demo-Map.h" />
     <ClInclude Include="DXGIType.h" />
-    <ClInclude Include="RW-Demo-3D-UI.h" />
+    <ClInclude Include="MarchenweltGame.h" />
+    <ClInclude Include="MarchenweltMenu.h" />
     <ClInclude Include="RWController.h" />
     <ClInclude Include="RWGraphics.h" />
     <ClInclude Include="RWHeaders.h" />
+    <ClInclude Include="RWLoading.h" />
     <ClInclude Include="RWPhysicsConstants.h" />
     <ClInclude Include="RWTimer.h" />
     <ClInclude Include="RWLevel.h" />
@@ -159,18 +161,17 @@
     <ClInclude Include="wincodec.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="hero.png" />
-    <Image Include="map.png" />
+    <Image Include="resources\img\avatar.png" />
+    <Image Include="resources\img\elite.PNG" />
+    <Image Include="resources\img\engine_logo.png" />
     <Image Include="resources\img\icon.ico" />
-    <Image Include="test.png" />
-    <Image Include="texture.png" />
-    <Image Include="glass_01.png" />
+    <Image Include="resources\img\mat_icon.png" />
+    <Image Include="resources\img\money_icon.png" />
+    <Image Include="resources\img\tec_norm.PNG" />
+    <Image Include="resources\img\tec_sil.PNG" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="MainMenuScript.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

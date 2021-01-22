@@ -1,5 +1,4 @@
 #include "RWLoading.h"
-#include "MarchenweltMenu.h"
 
 void RWLoading::load() {
 	timeout = 1;
@@ -28,7 +27,7 @@ void RWLoading::update(double, double) {
 	if (timeout == 525) buff += L"# Launching \n";
 	if (ready && timeout == 550) {
 		isNextReady = false;
-		RWController::loadInitialLevel(new MarchenweltMenu);
+//		RWController::loadInitialLevel(new /*class name*/);
 	}
 }
 

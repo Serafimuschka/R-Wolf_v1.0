@@ -23,6 +23,7 @@ RWGraphics::~RWGraphics() {
 }
 
 bool RWGraphics::init(HWND windowHandle) {
+	window = windowHandle;
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &factory);
 	if (!SUCCEEDED(hr)) return false;
 	RECT rc;

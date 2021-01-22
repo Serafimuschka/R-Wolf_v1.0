@@ -33,3 +33,12 @@ void RWController::update() {
 	hpTimer->update();
 	currentLevel->update(hpTimer->getTimeTotal(), hpTimer->getTimeDelta());
 }
+void RWController::throwIntoLevel(short data)
+{
+	currentLevel->buffer = data;
+}
+
+void RWController::throwSwitching()
+{
+	currentLevel->switcher = !currentLevel->switcher;
+}

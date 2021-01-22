@@ -7,7 +7,8 @@
 #include <D2D1.h>
 #include <DXGI.h>
 #include <DWrite.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
+using namespace DirectX;
 using namespace D2D1;
 
 #include <iostream>

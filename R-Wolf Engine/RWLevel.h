@@ -16,7 +16,8 @@ protected:
 public:
 	UINT							ScreenWidth = GetSystemMetrics(SM_CXSCREEN), 
 									ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
-
+	short buffer;
+	bool switcher;
 	static void initialize(RWGraphics* graphics) {
 		core = graphics;
 	}

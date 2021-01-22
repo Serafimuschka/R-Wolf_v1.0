@@ -33,10 +33,7 @@
     <ClCompile Include="RWLevel.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MarchenweltMenu.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="MarchenweltGame.cpp">
+    <ClCompile Include="mainscreen.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,10 +74,7 @@
     <ClInclude Include="RWLoading.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="MarchenweltMenu.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="MarchenweltGame.h">
+    <ClInclude Include="mainscreen.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,25 +82,7 @@
     <Image Include="resources\img\icon.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
-    <Image Include="resources\img\avatar.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
     <Image Include="resources\img\engine_logo.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resources\img\elite.PNG">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resources\img\mat_icon.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resources\img\money_icon.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resources\img\tec_norm.PNG">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resources\img\tec_sil.PNG">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

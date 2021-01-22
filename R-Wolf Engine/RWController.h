@@ -13,6 +13,8 @@ public:
 	static void initialize();
 	static void loadInitialLevel(RWLevel* level);
 	static void switchLevel(RWLevel* level);
+	static void throwIntoLevel(short);
+	static void throwSwitching();
 	static void render();
 	static void update();
 };

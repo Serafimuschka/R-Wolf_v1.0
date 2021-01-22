@@ -8,13 +8,17 @@
 
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+
 #include <Windows.h>
 #include <Psapi.h>
 #include <wchar.h>
+#include <dxgitype.h>
+#include <wincodec.h>
 #include <D2D1.h>
 #include <DXGI.h>
 #include <DWrite.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -27,6 +31,7 @@
 #define _RW_USE_GLOBAL_DEFINITIONS
 #include "RWGlobalDefinitions.h"
 
+using namespace DirectX;
 using namespace D2D1;
 using namespace std;
 
@@ -39,6 +44,7 @@ class RWGraphics {
 	ID2D1HwndRenderTarget*		renderTarget;
 	ID2D1SolidColorBrush*		brush;
 	ID2D1PathGeometry*			path;
+	HWND window;
 public:
 	unsigned int	endWidth = GetSystemMetrics(SM_CXSCREEN);
 	unsigned int	endHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -193,6 +199,11 @@ public:
 	}
 
 	bool init(HWND windowHandle);
+
+	HWND getHwnd()
+	{
+		return window;
+	}
 
 	void beginDraw() {
 		RT->BeginDraw();

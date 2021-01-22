@@ -145,10 +145,10 @@ LRESULT CALLBACK windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			RWController::throwIntoLevel(420);
 			break;
 		case 2000:
-			system("start http://www.vk.com");
+			system("start https://www.github.com/Serafimuschka/R-Wolf_v1.0");
 			break;
 		case 3000:
-			system("start http://www.vk.com");
+			system("start https://www.github.com/Serafimuschka/R-Wolf_v1.0/releases/");
 			break;
 		}
 		break;

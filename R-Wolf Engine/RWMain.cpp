@@ -38,7 +38,7 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int 
 	HWND windowHandle = CreateWindowEx(
 		WS_EX_OVERLAPPEDWINDOW,
 		"VLabs",
-		"Visual Labs | r0001",
+		"Visual Labs | r0002",
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_THICKFRAME,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,

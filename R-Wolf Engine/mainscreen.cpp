@@ -1,6 +1,6 @@
 ﻿#include "mainscreen.h"
 
-#define J0 1
+#define J0 2
 #define A 0.001
 #define N 4.0
 #define K 3.0
@@ -38,6 +38,12 @@ inline double fx(double in, double iterator)
 	return (pta / ptb) * ptc * ptd;
 }
 
+inline double mainscreen::scale()
+{
+	return (20.0 * this->screenDistance * this->wavelength) / (100.0 * this->slitWidth);
+}
+
+
 void mainscreen::load()
 {
 	switcher = false;
@@ -49,8 +55,8 @@ void mainscreen::load()
 	screenDistance = 0.2;
 	wave.x = 825;
 	wave.y = 250;
-	slit.y = 250;
-	screen.y = 250;
+	slit.y = 325;
+	screen.y = 300;
 	slit.x = 875;
 	screen.x = 925;
 	wave.z = wavelength;
@@ -63,9 +69,9 @@ void mainscreen::load()
 	manualContent += L"4. Снять измерения и обработать результаты.\n";
 }
 
-
 void mainscreen::update(double td, double tt)
 {
+	//SetCursor(LoadCursor((HINSTANCE)GetWindowLong(core->getHwnd(), GWL_HINSTANCE), IDC_ARROW));
 	GetCursorPos(&cPos);
 	ScreenToClient(core->getHwnd(), &cPos);
 	mouse = XMFLOAT2(cPos.x, cPos.y);
@@ -119,10 +125,10 @@ void mainscreen::update(double td, double tt)
 			ClientToScreen(core->getHwnd(), &cPos);
 			SetCursorPos(cPos.x, cPos.y);
 		}
-		if (mouse.y < 250)
+		if (mouse.y < 260)
 		{
 			cPos.x = slit.x;
-			cPos.y = 250;
+			cPos.y = 260;
 			ClientToScreen(core->getHwnd(), &cPos);
 			SetCursorPos(cPos.x, cPos.y);
 		}
@@ -148,10 +154,10 @@ void mainscreen::update(double td, double tt)
 			ClientToScreen(core->getHwnd(), &cPos);
 			SetCursorPos(cPos.x, cPos.y);
 		}
-		if (mouse.y < 250)
+		if (mouse.y < 260)
 		{
 			cPos.x = screen.x;
-			cPos.y = 250;
+			cPos.y = 260;
 			ClientToScreen(core->getHwnd(), &cPos);
 			SetCursorPos(cPos.x, cPos.y);
 		}
@@ -204,19 +210,20 @@ void mainscreen::render()
 	core->drawRectangle(XMFLOAT4(shutterLeftX, slitPosCenter.y, shutterRightX, slitPosCenter.y - 75.0), core->blue, 1.0);
 
 	// Отрисовка лазерного луча и диф картины
-	if (switcher) 
+	auto prevX = 512.0;
+	if (switcher && (int)slitWidth) 
 	{ 
 		core->drawLine(XMFLOAT4(150, 618, lasPosBegin.x, lasPosBegin.y), colorlength(wavelength, 0.5), 3.5);
-		//core->drawLine(XMFLOAT4(512, 0, 512, 150), colorlength(wavelength, 1));
-		for (short i = 0; i < 512; i++)
+		for (double i = 0, s = 0; i < 512; i += 1.0 - (1.0 / scale()), s += 0.77)
 		{
-			auto d = fx(difr(slitWidth, wavelength, i), i);
-			if (!i) core->drawLine(XMFLOAT4(512, 0, 512, 150), colorlength(wavelength, d));
+			auto d = fx(difr(slitWidth, wavelength, s), s);
+			if (!i) core->drawLine(XMFLOAT4(512, 0, 512, 150), colorlength(wavelength, 0.85));
 			else
 			{
 				core->drawLine(XMFLOAT4(512 - i, 0, 512 - i, 150), colorlength(wavelength, d));
 				core->drawLine(XMFLOAT4(512 + i, 0, 512 + i, 150), colorlength(wavelength, d));
 			}
+			prevX += i;
 		}
 	}
 

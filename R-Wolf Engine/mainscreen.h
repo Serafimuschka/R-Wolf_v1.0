@@ -33,6 +33,8 @@ private:
 
 	wstring manualHeader;
 	wstring manualContent;
+
+	inline double scale();
 public:
 	void load() override;
 	void unload() override;

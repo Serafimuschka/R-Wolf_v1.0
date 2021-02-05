@@ -2,6 +2,23 @@
 #include "RWLevel.h"
 #include "RWController.h"
 
+enum ThemeComponents
+{
+	background,
+	primaryColor,
+	secondaryColor,
+	secondaryDarkColor,
+	laserBodyColor,
+	rulerColor,
+	rulerBackground,
+	scalerAccent,
+	scalerAccentActive,
+	scalerBackground,
+	scalerSecondary,
+	textHeaders,
+	textAccent
+};
+
 class mainscreen : public RWLevel {
 private:
 	RWTimer* hpTimer;
@@ -35,6 +52,8 @@ private:
 	wstring manualContent;
 
 	inline double scale();
+
+	vector<D2D1_COLOR_F>* theme;
 public:
 	void load() override;
 	void unload() override;
